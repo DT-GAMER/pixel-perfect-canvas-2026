@@ -1,24 +1,36 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { EVENT } from "@/lib/event";
+import { Arcs } from "@/components/site/Logo";
+import { btnPrimary } from "@/components/site/Header";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: `${EVENT.name} — ${EVENT.tagline}` },
+      { name: "description", content: `${EVENT.name}: ${EVENT.tagline}. ${EVENT.dateLabel}, ${EVENT.venue}.` },
+      { property: "og:title", content: `${EVENT.name} — ${EVENT.tagline}` },
+      { property: "og:description", content: `${EVENT.dateLabel}, ${EVENT.venue}.` },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+// Phase 1 placeholder — full homepage sections arrive in Phase 2.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <>
+      <section className="relative overflow-hidden bg-deep-blue text-paper">
+        <Arcs className="arc-spin pointer-events-none absolute -right-32 top-1/2 h-[560px] w-[560px] -translate-y-1/2 opacity-80 md:-right-10" />
+        <div className="relative mx-auto max-w-7xl px-5 py-28 md:py-40">
+          <p className="font-display font-semibold text-digital-lime">{EVENT.dateLabel} · {EVENT.venue}</p>
+          <h1 className="mt-4 max-w-3xl text-h1">{EVENT.name}</h1>
+          <p className="mt-4 max-w-xl text-paper/85">{EVENT.tagline}</p>
+          <button type="button" data-register className={`${btnPrimary} mt-8`}>Register</button>
+        </div>
+      </section>
+      <section id="about" className="bg-paper"><div className="mx-auto max-w-7xl px-5 py-20"><h2 className="text-h2 text-deep-blue">About</h2><p className="mt-3 text-muted-foreground">Coming in Phase 2.</p></div></section>
+      <section id="theme" className="bg-digital-teal text-deep-blue"><div className="mx-auto max-w-7xl px-5 py-20"><h2 className="text-h2">Theme</h2><p className="mt-3">Coming in Phase 2.</p></div></section>
+      <section id="faq" className="bg-light-grey"><div className="mx-auto max-w-7xl px-5 py-20"><h2 className="text-h2 text-deep-blue">FAQ</h2><p className="mt-3 text-muted-foreground">Coming in Phase 2.</p></div></section>
+    </>
   );
 }
