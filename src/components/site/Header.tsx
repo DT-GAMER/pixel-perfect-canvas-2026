@@ -33,7 +33,7 @@ export function Header() {
         </Link>
         <nav aria-label="Main" className="hidden items-center gap-6 font-display font-medium lg:flex">
           {links.map((l) => (
-            <Link key={l.label} to={l.to} hash={"hash" in l ? l.hash : undefined} className="hover:text-digital-lime">
+            <Link key={l.label} to={l.to} {...("hash" in l ? { hash: l.hash } : {})} className="hover:text-digital-lime">
               {l.label}
             </Link>
           ))}
@@ -58,7 +58,7 @@ export function Header() {
             <Link
               key={l.label}
               to={l.to}
-              hash={"hash" in l ? l.hash : undefined}
+              {...("hash" in l ? { hash: l.hash } : {})}
               onClick={() => setOpen(false)}
               className="py-3 font-display text-h3 font-bold hover:text-digital-lime"
             >
