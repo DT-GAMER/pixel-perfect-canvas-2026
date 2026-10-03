@@ -8,3 +8,7 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+## Architecture rules
+
+- Keep homepage content and interactions in focused site components; the index route only composes the page and owns its metadata. This keeps the route readable as later phases replace placeholders with managed data.
