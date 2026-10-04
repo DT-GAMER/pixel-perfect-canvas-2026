@@ -145,7 +145,7 @@ export function Homepage() {
   const [activeSpeaker, setActiveSpeaker] = useState<typeof speakers[number] | null>(null);
   return (
     <>
-      <section className="relative flex min-h-[calc(100svh-5rem)] items-end overflow-hidden bg-deep-blue text-paper">
+      <section className="relative flex min-h-[calc(100svh-8rem)] items-end overflow-hidden bg-deep-blue text-paper">
         <Arcs className="arc-spin pointer-events-none absolute -right-44 top-4 h-[620px] w-[620px] opacity-80 md:-right-10 md:h-[760px] md:w-[760px]" />
         <div className="relative mx-auto w-full max-w-7xl px-5 pb-10 pt-24 md:pb-12 md:pt-32">
           <div className="max-w-4xl animate-enter-up">
