@@ -84,7 +84,7 @@
   @media (min-width: 768px) { body { font-size: 18px; } }
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
     line-height: 1.1;
     font-weight: 700;
   }
@@ -101,3 +101,22 @@
 
 @utility arc-spin { animation: arc-spin 60s linear infinite; }
 @keyframes arc-spin { to { transform: rotate(360deg); } }
+
+@utility animate-enter-up { animation: enter-up 0.8s ease-out both; }
+@keyframes enter-up { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+.arc-draw { stroke-dasharray: 900; animation: draw-arc 1.8s ease-out both; }
+.arc-delay { animation-delay: 0.25s; }
+.arc-delay-long { animation-delay: 0.5s; }
+@keyframes draw-arc { from { stroke-dashoffset: 900; } to { stroke-dashoffset: 0; } }
+
+.programme-ticker { animation: ticker 28s linear infinite; }
+.sponsor-marquee { animation: ticker 32s linear infinite; }
+@keyframes ticker { to { transform: translateX(-50%); } }
+
+.reveal { animation: reveal-up linear both; animation-timeline: view(); animation-range: entry 5% cover 28%; }
+@keyframes reveal-up { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .arc-draw, .programme-ticker, .sponsor-marquee, .reveal, .animate-enter-up { animation: none !important; }
+}
