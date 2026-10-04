@@ -114,12 +114,12 @@ function CountUp({ value, suffix }: { value: number; suffix: string }) {
 
 function SpeakerModal({ speaker, close }: { speaker: typeof speakers[number]; close: () => void }) {
   useEffect(() => {
-    document.body.dataset.modalOpen = "true";
+    document.body.dataset["modalOpen"] = "true";
     document.body.style.overflow = "hidden";
     const onKey = (event: KeyboardEvent) => event.key === "Escape" && close();
     window.addEventListener("keydown", onKey);
     return () => {
-      delete document.body.dataset.modalOpen;
+      delete document.body.dataset["modalOpen"];
       document.body.style.overflow = "";
       window.removeEventListener("keydown", onKey);
     };
@@ -221,10 +221,10 @@ export function Homepage() {
           <div className="reveal flex flex-col gap-5 md:flex-row md:items-end md:justify-between"><div><p className="font-display text-sm font-bold uppercase text-digital-teal">On the stage</p><h2 className="mt-3 text-h2 text-deep-blue">Ideas worth gathering for.</h2></div><Link to="/speakers" className="inline-flex min-h-12 items-center gap-2 font-display font-bold text-deep-blue hover:text-digital-teal">See all speakers <ArrowRight /></Link></div>
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {speakers.map((speaker) => (
-              <button key={speaker.name} type="button" onClick={() => setActiveSpeaker(speaker)} className="reveal group text-left">
+              <Button key={speaker.name} variant="ghost" type="button" onClick={() => setActiveSpeaker(speaker)} className="reveal group block h-auto min-h-0 whitespace-normal p-0 text-left hover:bg-transparent">
                 <span className="block aspect-[4/5] overflow-hidden rounded-t-[50%] bg-paper"><img src={speaker.image} alt={`Portrait of ${speaker.name}`} loading="lazy" width={1024} height={1280} className="h-full w-full object-cover grayscale transition duration-500 group-hover:scale-105 group-hover:grayscale-0" /></span>
                 <span className="mt-5 block font-display text-2xl font-bold text-deep-blue">{speaker.name}</span><span className="mt-1 block text-sm text-muted-foreground">{speaker.role} · {speaker.organization}</span>
-              </button>
+              </Button>
             ))}
           </div>
         </div>
