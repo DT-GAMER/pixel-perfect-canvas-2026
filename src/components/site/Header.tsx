@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { LogoMark } from "./Logo";
 import { EVENT } from "@/lib/event";
+import { Button } from "@/components/ui/button";
 
 const links = [
   { label: "About", to: "/", hash: "about" },
@@ -40,17 +41,19 @@ export function Header() {
         </nav>
         <div className="hidden items-center gap-3 lg:flex">
           <Link to="/sponsors" className={btnOutline}>Become a Sponsor</Link>
-          <button type="button" data-register className={btnPrimary}>Register</button>
+          <Button type="button" data-register className={btnPrimary}>Register</Button>
         </div>
-        <button
+        <Button
           type="button"
-          className="flex h-12 w-12 items-center justify-center lg:hidden"
+          variant="ghost"
+          size="icon"
+          className="flex h-12 w-12 items-center justify-center text-paper hover:bg-paper/10 hover:text-paper lg:hidden"
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           onClick={() => setOpen(!open)}
         >
           {open ? <X /> : <Menu />}
-        </button>
+        </Button>
       </div>
       {open && (
         <div className="fixed inset-0 top-20 z-40 flex flex-col gap-2 overflow-y-auto bg-deep-blue px-5 py-8 lg:hidden">
@@ -67,7 +70,7 @@ export function Header() {
           ))}
           <div className="mt-6 flex flex-col gap-3">
             <Link to="/sponsors" onClick={() => setOpen(false)} className={btnOutline}>Become a Sponsor</Link>
-            <button type="button" data-register className={btnPrimary}>Register</button>
+            <Button type="button" data-register className={btnPrimary}>Register</Button>
           </div>
         </div>
       )}

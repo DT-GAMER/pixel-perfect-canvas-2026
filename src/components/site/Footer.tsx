@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { EVENT } from "@/lib/event";
 import { btnPrimary } from "./Header";
+import { Button } from "@/components/ui/button";
 
 export function Footer() {
   return (
@@ -9,7 +10,7 @@ export function Footer() {
         <div>
           <h2 className="text-h3">Don't miss {EVENT.name}</h2>
           <p className="mt-3 text-paper/80">{EVENT.dateLabel} · {EVENT.venue}</p>
-          <button type="button" data-register className={`${btnPrimary} mt-6`}>Register now</button>
+          <Button type="button" data-register className={`${btnPrimary} mt-6`}>Register now</Button>
         </div>
         <nav aria-label="Footer" className="flex flex-col gap-2 font-display">
           <Link to="/speakers" className="hover:text-digital-lime">Speakers</Link>

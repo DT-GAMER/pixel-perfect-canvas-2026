@@ -6,10 +6,10 @@ export const EVENT = {
   venue: "Lagos State, Nigeria",
   startsAt: "2026-12-15T09:00:00+01:00",
   endsAt: "2026-12-15T18:00:00+01:00",
-  email: "hello@c8techsummit.com",
+  email: "C8techsummit@gmail.com",
   socials: [
-    { label: "X / Twitter", href: "https://x.com" },
-    { label: "LinkedIn", href: "https://linkedin.com" },
-    { label: "Instagram", href: "https://instagram.com" },
+    { label: "X / Twitter", href: "https://x.com/c8techsummit?s=21" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/company/c8-tech-summit/" },
+    { label: "Instagram", href: "https://www.instagram.com/c8techsummit?stkn=MWdyemZiMmxzODhydA==" },
   ],
 };
