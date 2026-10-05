@@ -14,13 +14,85 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      registration_rate_limits: {
+        Row: {
+          attempt_count: number
+          key_hash: string
+          updated_at: string
+          window_started_at: string
+        }
+        Insert: {
+          attempt_count?: number
+          key_hash: string
+          updated_at?: string
+          window_started_at?: string
+        }
+        Update: {
+          attempt_count?: number
+          key_hash?: string
+          updated_at?: string
+          window_started_at?: string
+        }
+        Relationships: []
+      }
+      registrations: {
+        Row: {
+          city: string
+          country: string
+          created_at: string
+          email: string
+          email_normalized: string | null
+          full_name: string
+          id: string
+          other_profession: string | null
+          privacy_agreed: boolean
+          profession: string
+          subscribe_updates: boolean
+          updated_at: string
+        }
+        Insert: {
+          city: string
+          country: string
+          created_at?: string
+          email: string
+          email_normalized?: string | null
+          full_name: string
+          id?: string
+          other_profession?: string | null
+          privacy_agreed: boolean
+          profession: string
+          subscribe_updates?: boolean
+          updated_at?: string
+        }
+        Update: {
+          city?: string
+          country?: string
+          created_at?: string
+          email?: string
+          email_normalized?: string | null
+          full_name?: string
+          id?: string
+          other_profession?: string | null
+          privacy_agreed?: boolean
+          profession?: string
+          subscribe_updates?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      consume_registration_attempt: {
+        Args: {
+          p_key_hash: string
+          p_max_attempts?: number
+          p_window_seconds?: number
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
