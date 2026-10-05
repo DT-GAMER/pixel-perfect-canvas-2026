@@ -12,6 +12,7 @@ import communityImage from "@/assets/track-community.jpg";
 import amaraImage from "@/assets/speaker-amara.jpg";
 import tundeImage from "@/assets/speaker-tunde.jpg";
 import zainabImage from "@/assets/speaker-zainab.jpg";
+import heroImage from "@/assets/c8-summit-hero.jpeg.asset.json";
 
 const stats = [
   { value: 1200, suffix: "+", label: "Attendees expected" },
@@ -145,19 +146,28 @@ export function Homepage() {
   const [activeSpeaker, setActiveSpeaker] = useState<typeof speakers[number] | null>(null);
   return (
     <>
-      <section className="relative flex min-h-[calc(100svh-8rem)] items-end overflow-hidden bg-deep-blue text-paper">
-        <Arcs className="arc-spin pointer-events-none absolute -right-44 top-4 h-[620px] w-[620px] opacity-80 md:-right-10 md:h-[760px] md:w-[760px]" />
-        <div className="relative mx-auto w-full max-w-7xl px-5 pb-10 pt-24 md:pb-12 md:pt-32">
-          <div className="max-w-4xl animate-enter-up">
+      <section className="relative flex min-h-[calc(100svh-9.5rem)] items-end overflow-hidden bg-deep-blue text-paper">
+        <img
+          src={heroImage.url}
+          alt="A technology summit audience gathered around an illuminated stage"
+          fetchPriority="high"
+          width={1080}
+          height={608}
+          className="absolute inset-0 h-full w-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-deep-blue/70" />
+        <Arcs className="arc-spin pointer-events-none absolute -right-52 -top-24 h-[560px] w-[560px] opacity-20 sm:-right-36 sm:h-[680px] sm:w-[680px] md:-right-12 md:-top-28 md:h-[820px] md:w-[820px] md:opacity-30" />
+        <div className="relative mx-auto w-full max-w-7xl px-5 pb-8 pt-20 md:pb-10 md:pt-28">
+          <div className="max-w-4xl animate-enter-up border-l-2 border-digital-lime pl-5 md:pl-8">
             <p className="font-display text-sm font-bold uppercase text-digital-lime">Lagos · 15 December 2026</p>
-            <h1 className="mt-4 text-h1">C8 Tech<br />Summit</h1>
-            <p className="mt-5 max-w-xl text-xl text-paper/85 md:text-2xl">{EVENT.tagline}</p>
+            <h1 className="mt-4 text-h1 text-paper">C8 Tech<br />Summit</h1>
+            <p className="mt-5 max-w-xl text-xl font-medium text-paper/90 md:text-2xl">{EVENT.tagline}</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button size="lg" data-register className="min-h-12 rounded-full px-7 font-display font-bold">Register now <ArrowRight /></Button>
-              <a href="#about" className="inline-flex min-h-12 items-center justify-center rounded-full border-2 border-paper px-7 font-display font-semibold transition hover:bg-paper hover:text-deep-blue">Discover the summit</a>
+              <a href="#about" className="inline-flex min-h-12 items-center justify-center rounded-full border-2 border-paper/80 bg-deep-blue/25 px-7 font-display font-semibold backdrop-blur-sm transition hover:bg-paper hover:text-deep-blue">Discover the summit</a>
             </div>
           </div>
-          <div className="mt-14 flex flex-col gap-6 border-t border-paper/20 pt-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="mt-12 flex flex-col gap-6 border-t border-paper/30 bg-deep-blue/25 px-4 py-5 backdrop-blur-sm sm:px-5 lg:flex-row lg:items-end lg:justify-between">
             <div className="flex flex-wrap gap-x-8 gap-y-3 text-sm sm:text-base">
               <span className="flex items-center gap-2"><CalendarDays className="text-digital-lime" /> 9:00 AM – 6:00 PM</span>
               <span className="flex items-center gap-2"><MapPin className="text-digital-lime" /> Lagos State, Nigeria</span>
