@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { ArrowRight, CheckCircle2, LoaderCircle } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Controller, useForm, type Control } from "react-hook-form";
+import { Controller, useForm, type Control, type Resolver } from "react-hook-form";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -50,7 +50,10 @@ export function RegisterModal() {
     reset,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<RegistrationInput>({ resolver: zodResolver(registrationSchema), defaultValues: emptyForm });
+  } = useForm<RegistrationInput>({
+    resolver: zodResolver(registrationSchema) as Resolver<RegistrationInput>,
+    defaultValues: emptyForm,
+  });
   const profession = watch("profession");
 
   useEffect(() => {
@@ -188,7 +191,7 @@ export function RegisterModal() {
   );
 }
 
-function Field({ label, error, className = "", children }: { label: string; error?: string; className?: string; children: ReactNode }) {
+function Field({ label, error, className = "", children }: { label: string; error: string | undefined; className?: string; children: ReactNode }) {
   return (
     <div className={className}>
       <Label className="mb-2 block font-display font-semibold text-deep-blue">{label}</Label>
@@ -198,7 +201,7 @@ function Field({ label, error, className = "", children }: { label: string; erro
   );
 }
 
-function CheckField({ control, name, error, children }: { control: Control<RegistrationInput>; name: "privacyAgreed" | "subscribeUpdates"; error?: string; children: ReactNode }) {
+function CheckField({ control, name, error, children }: { control: Control<RegistrationInput>; name: "privacyAgreed" | "subscribeUpdates"; error?: string | undefined; children: ReactNode }) {
   return (
     <div>
       <div className="flex items-start gap-3">
