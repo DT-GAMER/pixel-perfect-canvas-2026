@@ -35,9 +35,9 @@ export const registrationSchema = z
     otherProfession: z.string().trim().max(80, "Profession must be 80 characters or fewer").optional(),
     country: z.string().trim().min(2, "Choose your country").max(80, "Country must be 80 characters or fewer"),
     city: z.string().trim().min(2, "Enter your city").max(80, "City must be 80 characters or fewer"),
-    privacyAgreed: z.literal(true, { errorMap: () => ({ message: "Please agree to the privacy policy" }) }),
-    subscribeUpdates: z.boolean().default(false),
-    website: z.string().max(0).default(""),
+    privacyAgreed: z.boolean().refine((value) => value, "Please agree to the privacy policy"),
+    subscribeUpdates: z.boolean(),
+    website: z.string().max(0),
   })
   .superRefine((data, context) => {
     if (data.profession === "Other" && (!data.otherProfession || data.otherProfession.length < 2)) {

@@ -3,7 +3,8 @@ import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { ArrowRight, CheckCircle2, LoaderCircle } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, type Control } from "react-hook-form";
+import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -32,7 +33,7 @@ const emptyForm: RegistrationInput = {
   otherProfession: "",
   country: "Nigeria",
   city: "",
-  privacyAgreed: false as true,
+  privacyAgreed: false,
   subscribeUpdates: false,
   website: "",
 };
@@ -187,7 +188,7 @@ export function RegisterModal() {
   );
 }
 
-function Field({ label, error, className = "", children }: { label: string; error?: string; className?: string; children: React.ReactNode }) {
+function Field({ label, error, className = "", children }: { label: string; error?: string; className?: string; children: ReactNode }) {
   return (
     <div className={className}>
       <Label className="mb-2 block font-display font-semibold text-deep-blue">{label}</Label>
@@ -197,7 +198,7 @@ function Field({ label, error, className = "", children }: { label: string; erro
   );
 }
 
-function CheckField({ control, name, error, children }: { control: ReturnType<typeof useForm<RegistrationInput>>["control"]; name: "privacyAgreed" | "subscribeUpdates"; error?: string; children: React.ReactNode }) {
+function CheckField({ control, name, error, children }: { control: Control<RegistrationInput>; name: "privacyAgreed" | "subscribeUpdates"; error?: string; children: ReactNode }) {
   return (
     <div>
       <div className="flex items-start gap-3">
