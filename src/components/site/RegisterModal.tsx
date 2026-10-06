@@ -63,6 +63,7 @@ export function RegisterModal() {
       event.preventDefault();
       setResult(null);
       setOpen(true);
+      document.body.dataset["modalOpen"] = "true";
     };
     document.addEventListener("click", handleClick);
     return () => document.removeEventListener("click", handleClick);
@@ -134,35 +135,35 @@ export function RegisterModal() {
 
             <form onSubmit={submit} noValidate className="space-y-5 p-7 sm:p-10">
               <div className="grid gap-5 sm:grid-cols-2">
-                <Field label="Full name" error={errors.fullName?.message} className="sm:col-span-2">
-                  <Input autoFocus autoComplete="name" className="h-12" {...register("fullName")} aria-invalid={!!errors.fullName} />
+                <Field label="Full name" htmlFor="registration-name" error={errors.fullName?.message} className="sm:col-span-2">
+                  <Input id="registration-name" autoFocus autoComplete="name" className="h-12" {...register("fullName")} aria-invalid={!!errors.fullName} />
                 </Field>
-                <Field label="Email" error={errors.email?.message} className="sm:col-span-2">
-                  <Input type="email" autoComplete="email" className="h-12" {...register("email")} aria-invalid={!!errors.email} />
+                <Field label="Email" htmlFor="registration-email" error={errors.email?.message} className="sm:col-span-2">
+                  <Input id="registration-email" type="email" autoComplete="email" className="h-12" {...register("email")} aria-invalid={!!errors.email} />
                 </Field>
-                <Field label="Profession" error={errors.profession?.message} className="sm:col-span-2">
+                <Field label="Profession" htmlFor="registration-profession" error={errors.profession?.message} className="sm:col-span-2">
                   <Controller control={control} name="profession" render={({ field }) => (
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className="h-12 text-base"><SelectValue /></SelectTrigger>
+                      <SelectTrigger id="registration-profession" className="h-12 text-base"><SelectValue /></SelectTrigger>
                       <SelectContent>{professions.map((item) => <SelectItem key={item} value={item}>{item}</SelectItem>)}</SelectContent>
                     </Select>
                   )} />
                 </Field>
                 {profession === "Other" && (
-                  <Field label="Your profession" error={errors.otherProfession?.message} className="sm:col-span-2">
-                    <Input className="h-12" {...register("otherProfession")} aria-invalid={!!errors.otherProfession} />
+                  <Field label="Your profession" htmlFor="registration-other-profession" error={errors.otherProfession?.message} className="sm:col-span-2">
+                    <Input id="registration-other-profession" className="h-12" {...register("otherProfession")} aria-invalid={!!errors.otherProfession} />
                   </Field>
                 )}
-                <Field label="Country" error={errors.country?.message}>
+                <Field label="Country" htmlFor="registration-country" error={errors.country?.message}>
                   <Controller control={control} name="country" render={({ field }) => (
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className="h-12 text-base"><SelectValue /></SelectTrigger>
+                      <SelectTrigger id="registration-country" className="h-12 text-base"><SelectValue /></SelectTrigger>
                       <SelectContent>{countries.map((item) => <SelectItem key={item} value={item}>{item}</SelectItem>)}</SelectContent>
                     </Select>
                   )} />
                 </Field>
-                <Field label="City" error={errors.city?.message}>
-                  <Input autoComplete="address-level2" className="h-12" {...register("city")} aria-invalid={!!errors.city} />
+                <Field label="City" htmlFor="registration-city" error={errors.city?.message}>
+                  <Input id="registration-city" autoComplete="address-level2" className="h-12" {...register("city")} aria-invalid={!!errors.city} />
                 </Field>
               </div>
 
@@ -191,10 +192,10 @@ export function RegisterModal() {
   );
 }
 
-function Field({ label, error, className = "", children }: { label: string; error: string | undefined; className?: string; children: ReactNode }) {
+function Field({ label, htmlFor, error, className = "", children }: { label: string; htmlFor: string; error: string | undefined; className?: string; children: ReactNode }) {
   return (
     <div className={className}>
-      <Label className="mb-2 block font-display font-semibold text-deep-blue">{label}</Label>
+      <Label htmlFor={htmlFor} className="mb-2 block font-display font-semibold text-deep-blue">{label}</Label>
       {children}
       {error && <p role="alert" className="mt-1 text-sm font-medium text-destructive">{error}</p>}
     </div>
