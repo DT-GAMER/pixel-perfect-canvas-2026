@@ -15,6 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { CountdownPill } from "@/components/site/CountdownPill";
+import { RegisterModal } from "@/components/site/RegisterModal";
 
 function NotFoundComponent() {
   return (
@@ -128,6 +129,7 @@ function RootComponent() {
       </main>
       <Footer />
       <CountdownPill />
+      <RegisterModal />
     </QueryClientProvider>
   );
 }
