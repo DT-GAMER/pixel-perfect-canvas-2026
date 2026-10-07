@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { SpeakersPage } from "@/components/site/SpeakersPage";
 import { EVENT } from "@/lib/event";
+import { pageMeta } from "@/lib/seo";
 import { listSpeakers } from "@/lib/speakers.functions";
 import { TRACKS } from "@/lib/tracks";
 
@@ -12,17 +13,8 @@ const description = () =>
 export const Route = createFileRoute("/speakers")({
   validateSearch: z.object({ track: z.enum(trackSlugs).optional().catch(undefined) }),
   loader: () => listSpeakers(),
-  head: () => ({
-    meta: [
-      { title: `Speakers — ${EVENT.name}` },
-      { name: "description", content: description() },
-      { property: "og:title", content: `Speakers — ${EVENT.name}` },
-      { property: "og:description", content: description() },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [{ rel: "canonical", href: "/speakers" }],
-  }),
+  head: () =>
+    pageMeta({ title: `Speakers — ${EVENT.name}`, description: description(), path: "/speakers" }),
   component: SpeakersRoute,
 });
 

@@ -28,18 +28,19 @@ export function CountdownPill() {
   if (!t) return null;
   if (t.now > new Date(EVENT.endsAt).getTime()) return null;
   return (
-    <div
-      role="timer"
-      aria-label="Time until the event"
+    <aside
+      aria-label="Event countdown"
       className="fixed bottom-4 right-4 z-30 hidden rounded-full bg-deep-blue px-5 py-3 font-display font-bold text-paper shadow-lg min-[400px]:block [body[data-modal-open]_&]:hidden"
     >
-      {t.done ? (
-        <span className="text-digital-lime">● Happening now</span>
-      ) : (
-        <span className="tabular-nums">
-          <span className="text-digital-lime">{t.d}d</span> {pad(t.h)}h {pad(t.m)}m {pad(t.s)}s
-        </span>
-      )}
-    </div>
+      <div role="timer" aria-label="Time until the event">
+        {t.done ? (
+          <span className="text-digital-lime">● Happening now</span>
+        ) : (
+          <span className="tabular-nums">
+            <span className="text-digital-lime">{t.d}d</span> {pad(t.h)}h {pad(t.m)}m {pad(t.s)}s
+          </span>
+        )}
+      </div>
+    </aside>
   );
 }

@@ -10,7 +10,8 @@ export const Route = createFileRoute("/rss.xml")({
     handlers: {
       GET: async ({ request }) => {
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-        const site = (process.env["SITE_URL"] ?? new URL(request.url).origin).replace(/\/$/, "");
+        const { siteUrl } = await import("@/lib/site-url.server");
+        const site = siteUrl();
         const absolute = (url: string) => (url.startsWith("http") ? url : `${site}${url}`);
 
         const { data: posts, error } = await supabaseAdmin

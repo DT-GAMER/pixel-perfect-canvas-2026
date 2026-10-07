@@ -2,27 +2,54 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
 import { BlogPost } from "@/components/blog/BlogPost";
 import { getPost } from "@/lib/blog.functions";
-import { EVENT } from "@/lib/event";
+import { absoluteUrl, EVENT } from "@/lib/event";
+import { jsonLd, pageMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/blog/$slug")({
   validateSearch: z.object({ signin: z.string().optional().catch(undefined) }),
   loader: ({ params }) => getPost({ data: { slug: params.slug } }),
   head: ({ loaderData: post, params }) => {
-    if (!post) return { meta: [{ title: `Article not found — ${EVENT.name}` }] };
+    if (!post)
+      return {
+        meta: [
+          { title: `Article not found — ${EVENT.name}` },
+          { name: "robots", content: "noindex" },
+        ],
+      };
     const title = post.seoTitle ?? post.title;
     const description = post.seoDescription ?? post.excerpt;
+    const path = `/blog/${params.slug}`;
+    const meta = pageMeta({
+      title: `${title} — ${EVENT.name}`,
+      description,
+      path,
+      image: post.coverImageUrl,
+      ...(post.coverImageAlt ? { imageAlt: post.coverImageAlt } : {}),
+      type: "article",
+    });
     return {
+      ...meta,
       meta: [
-        { title: `${title} — ${EVENT.name}` },
-        { name: "description", content: description },
-        { property: "og:title", content: title },
-        { property: "og:description", content: description },
-        { property: "og:type", content: "article" },
+        ...meta.meta,
         { property: "article:published_time", content: post.publishedAt },
-        ...(post.coverImageUrl ? [{ property: "og:image", content: post.coverImageUrl }] : []),
-        { name: "twitter:card", content: "summary_large_image" },
+        ...(post.category ? [{ property: "article:section", content: post.category.name }] : []),
+        ...post.tags.map((tag) => ({ property: "article:tag", content: tag })),
       ],
-      links: [{ rel: "canonical", href: `/blog/${params.slug}` }],
+      scripts: [
+        jsonLd({
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          headline: post.title,
+          description,
+          image: post.coverImageUrl ? [absoluteUrl(post.coverImageUrl)] : undefined,
+          datePublished: post.publishedAt,
+          author: { "@type": "Organization", name: post.authorName },
+          publisher: { "@type": "Organization", name: EVENT.name, url: absoluteUrl("/") },
+          mainEntityOfPage: absoluteUrl(path),
+          isAccessibleForFree: post.isFree,
+          keywords: post.tags.join(", ") || undefined,
+        }),
+      ],
     };
   },
   component: BlogPostRoute,

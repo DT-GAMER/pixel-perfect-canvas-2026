@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { SponsorsPage } from "@/components/site/SponsorsPage";
 import { EVENT } from "@/lib/event";
+import { pageMeta } from "@/lib/seo";
 import { listSponsors } from "@/lib/sponsors.functions";
 import { ENQUIRY_TIERS } from "@/lib/sponsorship";
 
@@ -12,17 +13,12 @@ export const Route = createFileRoute("/sponsors")({
   // ?tier=gold preselects the tier in the enquiry form.
   validateSearch: z.object({ tier: z.enum(ENQUIRY_TIERS).optional().catch(undefined) }),
   loader: () => listSponsors(),
-  head: () => ({
-    meta: [
-      { title: `Sponsors & partners — ${EVENT.name}` },
-      { name: "description", content: description() },
-      { property: "og:title", content: `Sponsor ${EVENT.name}` },
-      { property: "og:description", content: description() },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [{ rel: "canonical", href: "/sponsors" }],
-  }),
+  head: () =>
+    pageMeta({
+      title: `Sponsors & partners — ${EVENT.name}`,
+      description: description(),
+      path: "/sponsors",
+    }),
   component: SponsorsRoute,
 });
 

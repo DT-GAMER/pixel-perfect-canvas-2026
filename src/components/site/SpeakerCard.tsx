@@ -73,7 +73,7 @@ export function SpeakerCard({ speaker }: { speaker: Speaker }) {
           />
         </span>
         {track && (
-          <span className="mt-5 block font-display text-sm font-bold uppercase text-digital-teal">
+          <span className="mt-5 block font-display text-sm font-bold uppercase text-teal-ink">
             {track}
           </span>
         )}
@@ -94,7 +94,7 @@ export function SpeakerCard({ speaker }: { speaker: Speaker }) {
           </div>
           <div className="p-8 md:p-10">
             {track && (
-              <p className="font-display text-sm font-bold uppercase text-digital-teal">{track}</p>
+              <p className="font-display text-sm font-bold uppercase text-teal-ink">{track}</p>
             )}
             <DialogTitle className="mt-3 text-h2 text-deep-blue">{speaker.name}</DialogTitle>
             {announced && (

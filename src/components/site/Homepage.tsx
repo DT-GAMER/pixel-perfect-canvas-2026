@@ -187,7 +187,7 @@ export function Homepage({ latestPosts, speakers, sponsors, faqs }: Props) {
       <section id="about" className="scroll-mt-20 bg-paper py-24 md:py-32">
         <div className="mx-auto max-w-7xl px-5">
           <div className="grid gap-12 lg:grid-cols-[0.7fr_1.3fr]">
-            <p className="reveal font-display text-sm font-bold uppercase text-digital-teal">
+            <p className="reveal font-display text-sm font-bold uppercase text-teal-ink">
               About C8
             </p>
             <div className="reveal">
@@ -258,7 +258,12 @@ export function Homepage({ latestPosts, speakers, sponsors, faqs }: Props) {
               ].map((item, i) => (
                 <span
                   key={`${item}-${i}`}
-                  className={i % 5 === 2 ? "text-digital-lime" : "text-deep-blue/45"}
+                  className={
+                    // Highlighted word: deep blue on a lime pill (lime text fails contrast on teal).
+                    i % 5 === 2
+                      ? "rounded-full bg-digital-lime px-4 text-deep-blue"
+                      : "text-deep-blue/75"
+                  }
                 >
                   {item} <span aria-hidden="true">·</span>
                 </span>
@@ -308,14 +313,12 @@ export function Homepage({ latestPosts, speakers, sponsors, faqs }: Props) {
         <div className="mx-auto max-w-7xl px-5">
           <div className="reveal flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="font-display text-sm font-bold uppercase text-digital-teal">
-                On the stage
-              </p>
+              <p className="font-display text-sm font-bold uppercase text-teal-ink">On the stage</p>
               <h2 className="mt-3 text-h2 text-deep-blue">Voices shaping the conversation.</h2>
             </div>
             <Link
               to="/speakers"
-              className="inline-flex min-h-12 items-center gap-2 font-display font-bold text-deep-blue hover:text-digital-teal"
+              className="inline-flex min-h-12 items-center gap-2 font-display font-bold text-deep-blue hover:text-teal-ink"
             >
               See all speakers <ArrowRight />
             </Link>
@@ -338,9 +341,7 @@ export function Homepage({ latestPosts, speakers, sponsors, faqs }: Props) {
         <div className="mx-auto max-w-7xl px-5">
           <div className="reveal grid gap-8 lg:grid-cols-2 lg:items-end">
             <div>
-              <p className="font-display text-sm font-bold uppercase text-signal-orange">
-                Our partners
-              </p>
+              <p className="font-display text-sm font-bold uppercase text-teal-ink">Our partners</p>
               <h2 className="mt-3 text-h2 text-deep-blue">Backing the builders.</h2>
             </div>
             <p className="max-w-xl text-muted-foreground">
@@ -353,7 +354,7 @@ export function Homepage({ latestPosts, speakers, sponsors, faqs }: Props) {
         <div className="mx-auto mt-10 max-w-7xl px-5">
           <Link
             to="/sponsors"
-            className="inline-flex min-h-12 items-center gap-2 font-display font-bold text-deep-blue hover:text-digital-teal"
+            className="inline-flex min-h-12 items-center gap-2 font-display font-bold text-deep-blue hover:text-teal-ink"
           >
             Explore partnerships <ArrowRight />
           </Link>
@@ -410,9 +411,7 @@ export function Homepage({ latestPosts, speakers, sponsors, faqs }: Props) {
         <section id="faq" className="scroll-mt-20 bg-light-grey py-24 md:py-32">
           <div className="mx-auto grid max-w-7xl gap-12 px-5 lg:grid-cols-[0.7fr_1.3fr]">
             <div className="reveal">
-              <p className="font-display text-sm font-bold uppercase text-digital-teal">
-                Good to know
-              </p>
+              <p className="font-display text-sm font-bold uppercase text-teal-ink">Good to know</p>
               <h2 className="mt-3 text-h2 text-deep-blue">
                 Questions,
                 <br />

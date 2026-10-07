@@ -22,6 +22,8 @@ export type SiteSettings = {
   linkedinUrl: string | null;
   instagramUrl: string | null;
   stats: Stat[];
+  /** Public origin, e.g. https://c8techsummit.com (not stored; set per request). */
+  siteUrl: string;
 };
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -38,6 +40,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   linkedinUrl: "https://www.linkedin.com/company/c8-tech-summit/",
   instagramUrl: "https://www.instagram.com/c8techsummit?stkn=MWdyemZiMmxzODhydA==",
   stats: [],
+  siteUrl: "http://localhost:3000",
 };
 
 const settings: SiteSettings = { ...DEFAULT_SETTINGS };
@@ -92,6 +95,9 @@ export const EVENT = {
   get stats() {
     return settings.stats;
   },
+  get siteUrl() {
+    return settings.siteUrl;
+  },
   /** "2026" */
   get edition() {
     return yearFormat.format(new Date(settings.startsAt));
@@ -117,3 +123,7 @@ export const EVENT = {
 
 /** "15 October 2026 · 4:00 PM WAT · Live online" */
 export const eventWhenWhere = () => `${EVENT.dateLabel} · ${EVENT.timeLabel} · ${EVENT.venue}`;
+
+/** Absolute URL for a site path, e.g. for canonical and Open Graph tags. */
+export const absoluteUrl = (path: string) =>
+  /^https?:\/\//.test(path) ? path : `${EVENT.siteUrl}${path.startsWith("/") ? "" : "/"}${path}`;

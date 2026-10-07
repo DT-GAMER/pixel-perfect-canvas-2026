@@ -37,7 +37,7 @@ export function SponsorsPreview({ sponsors }: { sponsors: Sponsor[] }) {
               >
                 <SponsorLogo
                   sponsor={sponsor}
-                  className="whitespace-nowrap text-2xl text-deep-blue/60 md:text-3xl"
+                  className="whitespace-nowrap text-2xl text-deep-blue/70 md:text-3xl"
                 />
               </li>
             ))}
@@ -49,7 +49,7 @@ export function SponsorsPreview({ sponsors }: { sponsors: Sponsor[] }) {
                 <li
                   key={`${tier.slug}-${index}`}
                   aria-hidden={index >= SPONSOR_TIERS.length}
-                  className="whitespace-nowrap font-display text-2xl font-bold text-deep-blue/40 md:text-4xl"
+                  className="whitespace-nowrap font-display text-2xl font-bold text-deep-blue/70 md:text-4xl"
                 >
                   {tier.name.replace(/ Partners$/, "")} partner{" "}
                   <span className="text-signal-orange">·</span> open

@@ -32,16 +32,28 @@ export function Header() {
           <LogoMark />
           <span>{EVENT.name}</span>
         </Link>
-        <nav aria-label="Main" className="hidden items-center gap-6 font-display font-medium lg:flex">
+        <nav
+          aria-label="Main"
+          className="hidden items-center gap-6 font-display font-medium lg:flex"
+        >
           {links.map((l) => (
-            <Link key={l.label} to={l.to} {...("hash" in l ? { hash: l.hash } : {})} className="hover:text-digital-lime">
+            <Link
+              key={l.label}
+              to={l.to}
+              {...("hash" in l ? { hash: l.hash } : {})}
+              className="hover:text-digital-lime"
+            >
               {l.label}
             </Link>
           ))}
         </nav>
         <div className="hidden items-center gap-3 lg:flex">
-          <Link to="/sponsors" className={btnOutline}>Become a Sponsor</Link>
-          <Button type="button" data-register className={btnPrimary}>Register</Button>
+          <Link to="/sponsors" className={btnOutline}>
+            Become a Sponsor
+          </Link>
+          <Button type="button" data-register className={btnPrimary}>
+            Register
+          </Button>
         </div>
         <Button
           type="button"
@@ -69,8 +81,12 @@ export function Header() {
             </Link>
           ))}
           <div className="mt-6 flex flex-col gap-3">
-            <Link to="/sponsors" onClick={() => setOpen(false)} className={btnOutline}>Become a Sponsor</Link>
-            <Button type="button" data-register className={btnPrimary}>Register</Button>
+            <Link to="/sponsors" onClick={() => setOpen(false)} className={btnOutline}>
+              Become a Sponsor
+            </Link>
+            <Button type="button" data-register className={btnPrimary}>
+              Register
+            </Button>
           </div>
         </div>
       )}

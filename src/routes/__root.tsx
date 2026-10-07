@@ -85,6 +85,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       meta: [
         { charSet: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { name: "theme-color", content: "#001F65" },
         { title: "C8 Tech Summit" },
         {
           name: "description",
@@ -145,8 +146,14 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <a
+        href="#main"
+        className="sr-only z-50 rounded-full bg-signal-orange px-5 py-3 font-display font-bold text-deep-blue focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+      >
+        Skip to content
+      </a>
       <Header />
-      <main>
+      <main id="main" tabIndex={-1} className="focus:outline-none">
         <Outlet />
       </main>
       <Footer />

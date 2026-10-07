@@ -1,7 +1,6 @@
 import { createStart, createCsrfMiddleware, createMiddleware } from "@tanstack/react-start";
 
 import { renderErrorPage } from "./lib/error-page";
-import { attachSupabaseAuth } from "@/integrations/supabase/auth-attacher";
 
 const errorMiddleware = createMiddleware().server(async ({ next }) => {
   try {
@@ -29,6 +28,26 @@ const settingsMiddleware = createMiddleware().server(async ({ next }) => {
   return next();
 });
 
+// Baseline security headers on every response.
+const securityHeadersMiddleware = createMiddleware().server(async ({ next }) => {
+  const result = await next();
+  const response = result instanceof Response ? result : result.response;
+  const set = (name: string, value: string) => {
+    try {
+      if (!response.headers.has(name)) response.headers.set(name, value);
+    } catch {
+      // Some responses (e.g. Response.redirect) have immutable headers.
+    }
+  };
+  set("X-Content-Type-Options", "nosniff");
+  set("Referrer-Policy", "strict-origin-when-cross-origin");
+  set("X-Frame-Options", "SAMEORIGIN");
+  set("Permissions-Policy", "camera=(), microphone=(), geolocation=(), interest-cohort=()");
+  if (process.env["SITE_URL"]?.startsWith("https://"))
+    set("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+  return result;
+});
+
 // Start installs this automatically when src/start.ts is absent; defining the
 // file opts out, so re-add it explicitly to keep server functions protected
 // from cross-site requests.
@@ -37,6 +56,10 @@ const csrfMiddleware = createCsrfMiddleware({
 });
 
 export const startInstance = createStart(() => ({
-  functionMiddleware: [attachSupabaseAuth],
-  requestMiddleware: [errorMiddleware, csrfMiddleware, settingsMiddleware],
+  requestMiddleware: [
+    securityHeadersMiddleware,
+    errorMiddleware,
+    csrfMiddleware,
+    settingsMiddleware,
+  ],
 }));

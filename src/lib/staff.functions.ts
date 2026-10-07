@@ -40,14 +40,46 @@ export const requestStaffSignIn = createServerFn({ method: "POST" })
       console.error("Staff lookup failed", error.message);
       return { status: "error" };
     }
-    if (!profile) return { status: "sent" };
+    if (!profile) {
+      // First deployment: BOOTSTRAP_ADMIN_EMAIL becomes admin, but only while
+      // there are no staff at all. Afterwards admins invite people from Team.
+      const bootstrap = process.env["BOOTSTRAP_ADMIN_EMAIL"]?.trim().toLowerCase();
+      if (!bootstrap || bootstrap !== data.email.toLowerCase()) return { status: "sent" };
+      const { count } = await supabaseAdmin
+        .from("profiles")
+        .select("id", { count: "exact", head: true });
+      if (count !== 0) return { status: "sent" };
+      const created = await supabaseAdmin.auth.admin.createUser({
+        email: bootstrap,
+        email_confirm: true,
+      });
+      let userId = created.data.user?.id;
+      if (!userId && created.error?.code === "email_exists") {
+        userId = (
+          await supabaseAdmin.auth.admin.generateLink({ type: "magiclink", email: bootstrap })
+        ).data.user?.id;
+      }
+      if (!userId) {
+        console.error("Bootstrap admin creation failed", created.error?.message);
+        return { status: "error" };
+      }
+      const { error: insertError } = await supabaseAdmin
+        .from("profiles")
+        .insert({ id: userId, email: bootstrap, role: "admin" });
+      if (insertError) {
+        console.error("Bootstrap admin profile failed", insertError.message);
+        return { status: "error" };
+      }
+      console.info(`Bootstrap admin created for ${bootstrap}`);
+    }
 
     try {
       const { createSignInLink } = await import("./reader.server");
       const { sendEmail } = await import("./email.server");
       const { staffSignInEmail } = await import("./reader-email.server");
-      const link = await createSignInLink(profile.email, "/admin");
-      await sendEmail(staffSignInEmail(profile.email, link));
+      const email = profile?.email ?? data.email.toLowerCase();
+      const link = await createSignInLink(email, "/admin");
+      await sendEmail(staffSignInEmail(email, link));
     } catch (cause) {
       console.error("Staff sign-in email failed", cause instanceof Error ? cause.message : cause);
       return { status: "error" };

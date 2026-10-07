@@ -20,7 +20,7 @@ export function PostCard({ post }: { post: PostSummary }) {
       </div>
       <div className="flex flex-1 flex-col p-6">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-display text-sm font-bold">
-          {post.category && <span className="text-digital-teal">{post.category.name}</span>}
+          {post.category && <span className="text-teal-ink">{post.category.name}</span>}
           {post.isFree && (
             <span className="inline-flex items-center gap-1 text-deep-blue/70">
               <LockOpen className="h-4 w-4" aria-hidden="true" /> Free to read

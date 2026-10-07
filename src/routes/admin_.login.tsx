@@ -61,12 +61,12 @@ function AdminLogin() {
           <LogoMark className="h-10 w-10" />
           <span>
             {EVENT.name}
-            <span className="block text-xs font-medium text-digital-teal">Dashboard</span>
+            <span className="block text-xs font-medium text-teal-ink">Dashboard</span>
           </span>
         </div>
         {state === "sent" ? (
           <div role="status" className="mt-8 text-center">
-            <CheckCircle2 className="mx-auto h-12 w-12 text-digital-teal" aria-hidden="true" />
+            <CheckCircle2 className="mx-auto h-12 w-12 text-teal-ink" aria-hidden="true" />
             <h1 className="mt-4 font-display text-2xl font-bold text-deep-blue">
               Check your inbox.
             </h1>

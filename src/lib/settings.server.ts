@@ -5,9 +5,11 @@ const CACHE_MS = 30_000;
 let cached: { value: SiteSettings; at: number } | undefined;
 
 export async function loadSettings(): Promise<SiteSettings> {
+  const { siteUrl } = await import("./site-url.server");
   if (cached && Date.now() - cached.at < CACHE_MS) {
-    applySettings(cached.value);
-    return cached.value;
+    const value = { ...cached.value, siteUrl: siteUrl() };
+    applySettings(value);
+    return value;
   }
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data, error } = await supabaseAdmin
@@ -32,8 +34,9 @@ export async function loadSettings(): Promise<SiteSettings> {
         linkedinUrl: data.linkedin_url,
         instagramUrl: data.instagram_url,
         stats: (data.stats as Stat[] | null) ?? [],
+        siteUrl: siteUrl(),
       }
-    : DEFAULT_SETTINGS;
+    : { ...DEFAULT_SETTINGS, siteUrl: siteUrl() };
   cached = { value, at: Date.now() };
   applySettings(value);
   return value;

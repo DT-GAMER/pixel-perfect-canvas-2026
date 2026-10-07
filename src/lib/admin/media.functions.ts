@@ -21,16 +21,6 @@ const TYPES: Record<string, { ext: string; magic: (bytes: Uint8Array) => boolean
   },
 };
 
-/** Public URL base for stored files (the browser-facing Supabase URL). */
-function publicBase() {
-  return (
-    process.env["SUPABASE_PUBLIC_URL"] ??
-    process.env["VITE_SUPABASE_URL"] ??
-    process.env["SUPABASE_URL"] ??
-    ""
-  ).replace(/\/$/, "");
-}
-
 /** Uploads an image from the dashboard (multipart: file, folder). Returns its public URL. */
 export const uploadMedia = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => {
@@ -62,5 +52,6 @@ export const uploadMedia = createServerFn({ method: "POST" })
       .from("media")
       .upload(path, bytes, { contentType: file.type, cacheControl: "31536000", upsert: false });
     if (error) throw new Error(`Upload failed: ${error.message}`);
-    return { url: `${publicBase()}/storage/v1/object/public/media/${path}` };
+    // Served by the app's /media route, so only the app needs a public domain.
+    return { url: `/media/${path}` };
   });

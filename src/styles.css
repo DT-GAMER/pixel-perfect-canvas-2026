@@ -33,6 +33,7 @@
   /* Brand palette */
   --color-deep-blue: var(--deep-blue);
   --color-digital-teal: var(--digital-teal);
+  --color-teal-ink: var(--teal-ink);
   --color-signal-orange: var(--signal-orange);
   --color-digital-lime: var(--digital-lime);
   --color-light-grey: var(--light-grey);
@@ -44,6 +45,8 @@
   --radius: 0.75rem;
   --deep-blue: oklch(0.255 0.135 263);   /* #001F65 */
   --digital-teal: oklch(0.65 0.13 170);  /* #00AC8A */
+  /* Darker teal for small text: 5.9:1 on white, 4.8:1 on light grey (WCAG AA). */
+  --teal-ink: #00725b;
   --signal-orange: oklch(0.69 0.19 40);  /* #FF6B35 */
   --digital-lime: oklch(0.86 0.21 125);  /* #B8E600 */
   --light-grey: oklch(0.93 0.004 85);    /* #EBEAE7 */

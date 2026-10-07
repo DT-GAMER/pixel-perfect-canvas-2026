@@ -68,6 +68,7 @@ export function BlogIndex({ posts, categories, activeCategory, page, pageCount }
             </p>
           ) : (
             <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              <h2 className="sr-only">Articles</h2>
               {posts.map((post) => (
                 <PostCard key={post.slug} post={post} />
               ))}

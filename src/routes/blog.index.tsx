@@ -3,6 +3,7 @@ import { z } from "zod";
 import { BlogIndex } from "@/components/blog/BlogIndex";
 import { listPosts } from "@/lib/blog.functions";
 import { EVENT } from "@/lib/event";
+import { pageMeta } from "@/lib/seo";
 
 const searchSchema = z.object({
   category: z.string().max(80).optional().catch(undefined),
@@ -22,25 +23,25 @@ export const Route = createFileRoute("/blog/")({
         ...(deps.page ? { page: deps.page } : {}),
       },
     }),
-  head: () => ({
-    meta: [
-      { title: `Blog — ${EVENT.name}` },
-      { name: "description", content: description() },
-      { property: "og:title", content: `Blog — ${EVENT.name}` },
-      { property: "og:description", content: description() },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [
-      { rel: "canonical", href: "/blog" },
-      {
-        rel: "alternate",
-        type: "application/rss+xml",
-        title: `${EVENT.name} blog`,
-        href: "/rss.xml",
-      },
-    ],
-  }),
+  head: () => {
+    const meta = pageMeta({
+      title: `Blog — ${EVENT.name}`,
+      description: description(),
+      path: "/blog",
+    });
+    return {
+      ...meta,
+      links: [
+        ...meta.links,
+        {
+          rel: "alternate",
+          type: "application/rss+xml",
+          title: `${EVENT.name} blog`,
+          href: "/rss.xml",
+        },
+      ],
+    };
+  },
   component: BlogIndexRoute,
 });
 

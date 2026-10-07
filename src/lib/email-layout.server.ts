@@ -1,5 +1,6 @@
 // Shared branded shell and helpers for transactional emails. Server only.
 import { EVENT } from "./event";
+import { siteUrl } from "./site-url.server";
 
 export const COLORS = {
   deepBlue: "#001F65",
@@ -12,9 +13,7 @@ export const COLORS = {
 export const escapeHtml = (value: string) =>
   value.replace(/[&<>"']/g, (char) => `&#${char.charCodeAt(0)};`);
 
-export function siteUrl() {
-  return (process.env["SITE_URL"] ?? "http://localhost:3000").replace(/\/$/, "");
-}
+export { siteUrl } from "./site-url.server";
 
 export const firstName = (fullName: string) => fullName.trim().split(/\s+/)[0] ?? fullName;
 

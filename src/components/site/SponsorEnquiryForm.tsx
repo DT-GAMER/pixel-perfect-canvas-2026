@@ -57,7 +57,7 @@ export function SponsorEnquiryForm({ defaultTier }: { defaultTier?: Tier | undef
   if (sent) {
     return (
       <div role="status" className="py-10 text-center">
-        <CheckCircle2 className="mx-auto h-14 w-14 text-digital-teal" aria-hidden="true" />
+        <CheckCircle2 className="mx-auto h-14 w-14 text-teal-ink" aria-hidden="true" />
         <h3 className="mt-5 text-h2 text-deep-blue">Thank you.</h3>
         <p className="mx-auto mt-4 max-w-md text-muted-foreground">
           We've received your enquiry and sent a confirmation to your inbox. The C8 team will be in

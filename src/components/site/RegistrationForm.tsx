@@ -141,7 +141,7 @@ export function RegistrationForm({
                 <SelectContent>
                   {professionGroups.map((group) => (
                     <SelectGroup key={group.label}>
-                      <SelectLabel className="font-display text-xs uppercase text-digital-teal">
+                      <SelectLabel className="font-display text-xs uppercase text-teal-ink">
                         {group.label}
                       </SelectLabel>
                       {group.options.map((item) => (

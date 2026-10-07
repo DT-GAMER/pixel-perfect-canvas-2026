@@ -33,7 +33,7 @@ function applyMark(mark: RichMark, child: ReactNode, key: number): ReactNode {
         <a
           key={key}
           href={href}
-          className="font-semibold text-deep-blue underline decoration-digital-teal decoration-2 underline-offset-4 hover:text-digital-teal"
+          className="font-semibold text-deep-blue underline decoration-digital-teal decoration-2 underline-offset-4 hover:text-teal-ink"
           {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
         >
           {child}
@@ -74,16 +74,13 @@ function renderNode(node: RichNode, key: number): ReactNode {
     }
     case "bulletList":
       return (
-        <ul key={key} className="list-disc space-y-2 pl-6 marker:text-digital-teal">
+        <ul key={key} className="list-disc space-y-2 pl-6 marker:text-teal-ink">
           {renderChildren(node.content)}
         </ul>
       );
     case "orderedList":
       return (
-        <ol
-          key={key}
-          className="list-decimal space-y-2 pl-6 marker:font-bold marker:text-digital-teal"
-        >
+        <ol key={key} className="list-decimal space-y-2 pl-6 marker:font-bold marker:text-teal-ink">
           {renderChildren(node.content)}
         </ol>
       );

@@ -64,9 +64,7 @@ export function SponsorsPage({ sponsors, enquiryTier }: Props) {
 
       <section aria-labelledby="why-sponsor" className="bg-paper py-20 md:py-28">
         <div className="mx-auto max-w-7xl px-5">
-          <p className="font-display text-sm font-bold uppercase text-digital-teal">
-            Why sponsor us
-          </p>
+          <p className="font-display text-sm font-bold uppercase text-teal-ink">Why sponsor us</p>
           <h2 id="why-sponsor" className="mt-3 max-w-3xl text-h2 text-deep-blue">
             A focused audience and a conversation that matters.
           </h2>
@@ -99,7 +97,7 @@ export function SponsorsPage({ sponsors, enquiryTier }: Props) {
 
       <section aria-labelledby="partners" className="bg-light-grey py-20 md:py-28">
         <div className="mx-auto max-w-7xl px-5">
-          <p className="font-display text-sm font-bold uppercase text-digital-teal">Our partners</p>
+          <p className="font-display text-sm font-bold uppercase text-teal-ink">Our partners</p>
           <h2 id="partners" className="mt-3 text-h2 text-deep-blue">
             {sponsors.length ? "Thank you to our partners." : "Partner slots are open."}
           </h2>
@@ -205,7 +203,7 @@ function TierSection({
 function OpenSlot({ tier }: { tier: (typeof SPONSOR_TIERS)[number] }) {
   return (
     <li className="flex flex-col rounded-md border-2 border-dashed border-deep-blue/30 p-6">
-      <p className="font-display text-sm font-bold uppercase text-digital-teal">Available</p>
+      <p className="font-display text-sm font-bold uppercase text-teal-ink">Available</p>
       <p className="mt-2 font-display text-xl font-bold text-deep-blue">{tier.name}</p>
       <p className="mt-2 flex-1 text-muted-foreground">{tier.pitch}</p>
       <Link

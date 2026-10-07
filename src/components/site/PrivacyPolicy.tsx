@@ -28,7 +28,7 @@ export function PrivacyPolicy({ policy }: Props) {
       <article className="bg-paper">
         <div className="mx-auto max-w-3xl px-5 py-20 md:py-28">
           {policy.updatedAt && (
-            <p className="font-display text-sm font-bold uppercase text-digital-teal">
+            <p className="font-display text-sm font-bold uppercase text-teal-ink">
               Last updated {formatDate(policy.updatedAt)}
             </p>
           )}
@@ -50,7 +50,7 @@ export function PrivacyPolicy({ policy }: Props) {
   return (
     <article className="bg-paper">
       <div className="mx-auto max-w-3xl px-5 py-20 md:py-28">
-        <p className="font-display text-sm font-bold uppercase text-digital-teal">
+        <p className="font-display text-sm font-bold uppercase text-teal-ink">
           Last updated {LAST_UPDATED}
         </p>
         <h1 className="mt-4 text-h1 text-deep-blue">Privacy policy</h1>
