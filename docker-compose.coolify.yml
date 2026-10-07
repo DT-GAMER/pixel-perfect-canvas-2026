@@ -28,8 +28,8 @@ services:
       - SERVICE_FQDN_APP_3000
       - NODE_ENV=production
       - PORT=3000
-      # Public URL for emails, canonical links and the sitemap. Leave empty to
-      # derive it from the request (Coolify's proxy forwards the host).
+      # Public URL for emails, canonical links and the sitemap. If SITE_URL is
+      # empty, the app falls back to Coolify's SERVICE_FQDN_APP_3000.
       - SITE_URL=${SITE_URL:-}
       # Behind Coolify's Traefik proxy, X-Forwarded-For is set by the proxy.
       - TRUST_PROXY=true
@@ -99,7 +99,7 @@ services:
       - API_EXTERNAL_URL=http://gateway:8000
       - GOTRUE_DB_DRIVER=postgres
       - GOTRUE_DB_DATABASE_URL=postgres://supabase_auth_admin:${SERVICE_PASSWORD_DBSERVICE}@${POSTGRES_HOST:-62.238.60.119}:${POSTGRES_PORT:-6000}/${POSTGRES_DB:-postgres}
-      - GOTRUE_SITE_URL=${SITE_URL:-http://localhost:3000}
+      - GOTRUE_SITE_URL=${SITE_URL:-${SERVICE_FQDN_APP_3000:-http://localhost:3000}}
       - GOTRUE_DISABLE_SIGNUP=false
       - GOTRUE_JWT_ADMIN_ROLES=service_role
       - GOTRUE_JWT_AUD=authenticated

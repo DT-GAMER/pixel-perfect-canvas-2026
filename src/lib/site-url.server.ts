@@ -5,6 +5,13 @@ import { getRequest } from "@tanstack/react-start/server";
 export function siteUrl(): string {
   const configured = process.env["SITE_URL"]?.trim();
   if (configured) return configured.replace(/\/$/, "");
+
+  const coolifyUrl = process.env["SERVICE_FQDN_APP_3000"]?.trim();
+  if (coolifyUrl) {
+    const withScheme = /^https?:\/\//i.test(coolifyUrl) ? coolifyUrl : `https://${coolifyUrl}`;
+    return withScheme.replace(/\/$/, "");
+  }
+
   try {
     const request = getRequest();
     const headers = request?.headers;
