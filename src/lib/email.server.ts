@@ -13,6 +13,8 @@ export type EmailMessage = {
   html: string;
   text: string;
   attachments?: EmailAttachment[];
+  /** Overrides EMAIL_REPLY_TO for this message. */
+  replyTo?: string;
   /** Resend de-duplicates sends with the same key for 24 hours. */
   idempotencyKey?: string;
 };
@@ -31,7 +33,8 @@ let resend: Resend | undefined;
 let smtp: Transporter | undefined;
 
 export async function sendEmail(message: EmailMessage): Promise<EmailResult> {
-  const { from, replyTo } = sender();
+  const { from, replyTo: defaultReplyTo } = sender();
+  const replyTo = message.replyTo ?? defaultReplyTo;
   const apiKey = env("RESEND_API_KEY");
 
   if (apiKey) {

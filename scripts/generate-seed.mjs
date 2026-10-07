@@ -1,4 +1,5 @@
-// Generates supabase/seed.sql: sample blog categories and posts.
+// Generates supabase/seed.sql: sample blog categories and posts, and placeholder speakers.
+// No sample sponsors: empty tiers render as "available" slots instead of fake brands.
 // Posts are written in a small markdown-like format and converted to Tiptap JSON.
 //
 //   node scripts/generate-seed.mjs && npm run db:seed
@@ -213,6 +214,51 @@ Replace this content with highlights from the event.
   },
 ];
 
+// Placeholder lineup until confirmed speakers are announced.
+const speakers = [
+  {
+    slug: "amara-okafor",
+    name: "Dr. Amara Okafor",
+    role: "AI Research Director",
+    organization: "Placeholder Lab",
+    track: "privacy",
+    photo: "/speakers/amara.jpg",
+    bio: "Amara researches how AI systems are built and deployed responsibly, with a focus on data protection in African markets.",
+    linkedin: "https://www.linkedin.com/",
+    featured: true,
+  },
+  {
+    slug: "tunde-adebayo",
+    name: "Tunde Adebayo",
+    role: "Founder & CEO",
+    organization: "Placeholder Fintech",
+    track: "financial-security",
+    photo: "/speakers/tunde.jpg",
+    bio: "Tunde builds payment infrastructure for Nigerian businesses and thinks a lot about fraud, trust, and financial inclusion.",
+    x: "https://x.com/",
+    featured: true,
+  },
+  {
+    slug: "zainab-bello",
+    name: "Zainab Bello",
+    role: "Product Lead",
+    organization: "Placeholder Studio",
+    track: "ai-and-jobs",
+    photo: "/speakers/zainab.jpg",
+    bio: "Zainab helps early-stage teams turn AI ideas into products people use, and mentors emerging builders breaking into tech.",
+    linkedin: "https://www.linkedin.com/",
+    featured: true,
+  },
+  ...["ai-and-jobs", "financial-security", "nigerias-direction"].map((track, index) => ({
+    slug: `to-be-announced-${index + 1}`,
+    name: "To be announced",
+    role: "Speaker",
+    organization: null,
+    track,
+    bio: "We're confirming more voices for this conversation. Follow us for announcements.",
+  })),
+];
+
 // ---- tiny markdown-ish → Tiptap JSON converter ----
 
 function inline(text) {
@@ -279,5 +325,16 @@ for (const post of posts) {
   );
 }
 
+speakers.forEach((speaker, index) => {
+  out.push(
+    "INSERT INTO public.speakers (slug, name, role, organization, bio, photo_url, photo_alt, track, linkedin_url, x_url, is_featured, display_order)",
+    `VALUES (${sql(speaker.slug)}, ${sql(speaker.name)}, ${sql(speaker.role)}, ${sql(speaker.organization)}, ${sql(speaker.bio)}, ${sql(speaker.photo)}, ${speaker.photo ? sql(`Portrait of ${speaker.name}`) : "NULL"}, ${sql(speaker.track)}, ${sql(speaker.linkedin)}, ${sql(speaker.x)}, ${speaker.featured ? "true" : "false"}, ${index})`,
+    "ON CONFLICT (slug) DO NOTHING;",
+    "",
+  );
+});
+
 writeFileSync("supabase/seed.sql", out.join("\n"));
-console.log(`Wrote supabase/seed.sql (${categories.length} categories, ${posts.length} posts)`);
+console.log(
+  `Wrote supabase/seed.sql (${categories.length} categories, ${posts.length} posts, ${speakers.length} speakers)`,
+);

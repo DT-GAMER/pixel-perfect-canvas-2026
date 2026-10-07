@@ -27,3 +27,14 @@
 - [x] RSS feed at `/rss.xml` (no gated text)
 - [x] Sample categories and posts on the 2026 theme
 - [ ] Replace sample posts with real articles (admin editor in Phase 6)
+
+## Phase 5 — Speakers and sponsors
+
+- [x] `speakers`, `sponsors`, `sponsor_enquiries` tables with RLS
+- [x] `/speakers` with conversation filters; accessible profile dialog with social links
+- [x] Homepage featured speakers and sponsor strip from the database
+- [x] `/sponsors` with tiered partners, open-slot cards, "Why sponsor us", campaign targets
+- [x] Sponsor enquiry form: validation, honeypot, rate limiting, team notification + acknowledgement emails
+- [ ] Real speaker lineup (names, roles, bios, photos, socials, conversation)
+- [ ] Real sponsors (logos, links, tiers, descriptions)
+

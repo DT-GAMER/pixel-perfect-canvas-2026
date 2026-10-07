@@ -193,6 +193,159 @@ export type Database = {
         }
         Relationships: []
       }
+      speakers: {
+        Row: {
+          bio: string | null
+          created_at: string
+          display_order: number
+          id: string
+          instagram_url: string | null
+          is_featured: boolean
+          is_published: boolean
+          linkedin_url: string | null
+          name: string
+          organization: string | null
+          photo_alt: string | null
+          photo_url: string | null
+          role: string | null
+          slug: string
+          track: string | null
+          updated_at: string
+          website_url: string | null
+          x_url: string | null
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string
+          display_order?: number
+          id?: string
+          instagram_url?: string | null
+          is_featured?: boolean
+          is_published?: boolean
+          linkedin_url?: string | null
+          name: string
+          organization?: string | null
+          photo_alt?: string | null
+          photo_url?: string | null
+          role?: string | null
+          slug: string
+          track?: string | null
+          updated_at?: string
+          website_url?: string | null
+          x_url?: string | null
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string
+          display_order?: number
+          id?: string
+          instagram_url?: string | null
+          is_featured?: boolean
+          is_published?: boolean
+          linkedin_url?: string | null
+          name?: string
+          organization?: string | null
+          photo_alt?: string | null
+          photo_url?: string | null
+          role?: string | null
+          slug?: string
+          track?: string | null
+          updated_at?: string
+          website_url?: string | null
+          x_url?: string | null
+        }
+        Relationships: []
+      }
+      sponsor_enquiries: {
+        Row: {
+          company: string
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          notes: string | null
+          notification_error: string | null
+          notified_at: string | null
+          phone: string | null
+          status: string
+          tier_interest: string
+          updated_at: string
+        }
+        Insert: {
+          company: string
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          notes?: string | null
+          notification_error?: string | null
+          notified_at?: string | null
+          phone?: string | null
+          status?: string
+          tier_interest: string
+          updated_at?: string
+        }
+        Update: {
+          company?: string
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          notes?: string | null
+          notification_error?: string | null
+          notified_at?: string | null
+          phone?: string | null
+          status?: string
+          tier_interest?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      sponsors: {
+        Row: {
+          created_at: string
+          description: string | null
+          display_order: number
+          id: string
+          is_visible: boolean
+          logo_alt: string | null
+          logo_url: string | null
+          name: string
+          tier: string
+          updated_at: string
+          website_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          is_visible?: boolean
+          logo_alt?: string | null
+          logo_url?: string | null
+          name: string
+          tier: string
+          updated_at?: string
+          website_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          is_visible?: boolean
+          logo_alt?: string | null
+          logo_url?: string | null
+          name?: string
+          tier?: string
+          updated_at?: string
+          website_url?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -204,8 +357,8 @@ export type Database = {
       }
       consume_registration_attempt: {
         Args: {
-          p_key_hash: string
           p_window_seconds?: number
+          p_key_hash: string
           p_max_attempts?: number
         }
         Returns: boolean

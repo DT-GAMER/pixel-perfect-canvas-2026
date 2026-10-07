@@ -64,7 +64,7 @@ Stop the services with `npm run services:down`. With the local database, `docker
 | `npm run dev` | Vite dev server with SSR and hot reload |
 | `npm run build` / `npm start` | Production build into `.output/`, then run it with Node |
 | `npm run services:up` / `services:down` | Start/stop the local Supabase stack |
-| `npm run db:migrate` | Apply any new migration files |
+| `npm run db:migrate` | Apply any new migration files (and reload the API's schema cache) |
 | `npm run db:seed` | Load sample content from `supabase/seed.sql` (idempotent) |
 | `npm run db:types` | Regenerate `src/integrations/supabase/types.ts` from the local database |
 | `npm test` / `npm run lint` | Vitest / ESLint |
@@ -108,6 +108,13 @@ The template lives in `src/lib/registration-email.server.ts`; event facts (date,
 - **Reader sign-in:** the sign-up wall reuses the registration form. On sign-up the confirmation email includes a "Continue reading" magic link; registered readers can request a sign-in link. Links land on `/auth/confirm`, which sets an httpOnly session cookie (stays signed in on that device).
 - **Scheduling:** a post with `status = 'scheduled'` goes live automatically once `published_at` passes.
 - Posts are stored as Tiptap JSON (`blog_posts.content`); the admin editor arrives in Phase 6. Until then, sample posts come from `scripts/generate-seed.mjs` → `supabase/seed.sql` (`npm run seed:generate && npm run db:seed`).
+
+## Speakers and sponsors
+
+- `/speakers` lists published speakers with a filter per conversation (`?track=privacy`); featured speakers also appear on the homepage. Cards open an accessible profile with bio and social links. Speakers without a photo get a branded placeholder.
+- `/sponsors` groups visible sponsors by tier (Headline → Media Partners). Tiers without a partner show an "Available" card that preselects that tier in the enquiry form (`/sponsors?tier=gold#enquire`). No fake sponsors are seeded.
+- **Sponsor enquiries** are validated on the server, rate limited (3 per hour per IP), saved to `sponsor_enquiries` (status `new` / `contacted` / `closed`), emailed to `SPONSOR_ENQUIRY_EMAIL` with reply-to set to the enquirer, and acknowledged to the enquirer.
+- Until the admin dashboard (Phase 6), edit speakers and sponsors in Supabase Studio (http://localhost:54323) or via `scripts/generate-seed.mjs`.
 
 ## Project layout
 

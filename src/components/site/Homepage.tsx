@@ -1,18 +1,19 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, CalendarDays, MonitorPlay, Quote, X } from "lucide-react";
+import { ArrowRight, CalendarDays, MonitorPlay, Quote } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { EVENT } from "@/lib/event";
 import type { PostSummary } from "@/lib/blog.functions";
+import type { Speaker } from "@/lib/speakers.functions";
+import type { Sponsor } from "@/lib/sponsors.functions";
+import { SpeakerCard } from "./SpeakerCard";
+import { SponsorsPreview } from "./SponsorsPreview";
 import { useCountdown } from "./CountdownPill";
 import { Arcs } from "./Logo";
 import aiHealthImage from "@/assets/track-ai-health.jpg";
 import innovationImage from "@/assets/track-innovation.jpg";
 import entrepreneurshipImage from "@/assets/track-entrepreneurship.jpg";
 import communityImage from "@/assets/track-community.jpg";
-import amaraImage from "@/assets/speaker-amara.jpg";
-import tundeImage from "@/assets/speaker-tunde.jpg";
-import zainabImage from "@/assets/speaker-zainab.jpg";
 import heroImage from "@/assets/c8-summit-hero.jpeg";
 
 const stats = [
@@ -55,13 +56,6 @@ const tracks = [
     image: communityImage,
     accent: "bg-light-grey text-deep-blue",
   },
-];
-
-// Placeholder lineup until the confirmed speakers are announced.
-const speakers = [
-  { name: "Dr. Amara Okafor", role: "AI Research Director", organization: "Placeholder Lab", image: amaraImage, bio: "Amara researches how AI systems are built and deployed responsibly, with a focus on data protection in African markets." },
-  { name: "Tunde Adebayo", role: "Founder & CEO", organization: "Placeholder Fintech", image: tundeImage, bio: "Tunde builds payment infrastructure for Nigerian businesses and thinks a lot about fraud, trust, and financial inclusion." },
-  { name: "Zainab Bello", role: "Product Lead", organization: "Placeholder Studio", image: zainabImage, bio: "Zainab helps early-stage teams turn AI ideas into products people use, and mentors emerging builders breaking into tech." },
 ];
 
 const faqs = [
@@ -116,37 +110,9 @@ function CountUp({ value, suffix }: { value: number; suffix: string }) {
   return <span ref={ref}>{display.toLocaleString()}{suffix}</span>;
 }
 
-function SpeakerModal({ speaker, close }: { speaker: typeof speakers[number]; close: () => void }) {
-  useEffect(() => {
-    document.body.dataset["modalOpen"] = "true";
-    document.body.style.overflow = "hidden";
-    const onKey = (event: KeyboardEvent) => event.key === "Escape" && close();
-    window.addEventListener("keydown", onKey);
-    return () => {
-      delete document.body.dataset["modalOpen"];
-      document.body.style.overflow = "";
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [close]);
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/80 p-5" role="presentation" onMouseDown={(event) => event.currentTarget === event.target && close()}>
-      <div role="dialog" aria-modal="true" aria-labelledby="speaker-name" className="relative grid max-h-[90vh] w-full max-w-3xl overflow-y-auto bg-paper md:grid-cols-[280px_1fr]">
-        <img src={speaker.image} alt="" className="h-full max-h-96 w-full object-cover md:max-h-none" width={1024} height={1280} />
-        <div className="p-8 md:p-10">
-          <Button variant="ghost" size="icon" className="absolute right-3 top-3 min-h-12 min-w-12" onClick={close} aria-label="Close speaker profile"><X /></Button>
-          <p className="font-display text-sm font-bold uppercase text-digital-teal">Speaker</p>
-          <h3 id="speaker-name" className="mt-3 text-h2 text-deep-blue">{speaker.name}</h3>
-          <p className="mt-3 font-display font-semibold text-ink">{speaker.role} · {speaker.organization}</p>
-          <p className="mt-6 text-muted-foreground">{speaker.bio}</p>
-          <p className="mt-5 text-sm text-muted-foreground">Placeholder profile — full biography and social links will be added with the final speaker lineup.</p>
-        </div>
-      </div>
-    </div>
-  );
-}
+type Props = { latestPosts: PostSummary[]; speakers: Speaker[]; sponsors: Sponsor[] };
 
-export function Homepage({ latestPosts }: { latestPosts: PostSummary[] }) {
-  const [activeSpeaker, setActiveSpeaker] = useState<typeof speakers[number] | null>(null);
+export function Homepage({ latestPosts, speakers, sponsors }: Props) {
   return (
     <>
       <section className="relative flex min-h-[calc(100svh-9.5rem)] items-end overflow-hidden bg-deep-blue text-paper">
@@ -232,20 +198,19 @@ export function Homepage({ latestPosts }: { latestPosts: PostSummary[] }) {
       <section className="bg-light-grey py-24 md:py-32">
         <div className="mx-auto max-w-7xl px-5">
           <div className="reveal flex flex-col gap-5 md:flex-row md:items-end md:justify-between"><div><p className="font-display text-sm font-bold uppercase text-digital-teal">On the stage</p><h2 className="mt-3 text-h2 text-deep-blue">Voices shaping the conversation.</h2></div><Link to="/speakers" className="inline-flex min-h-12 items-center gap-2 font-display font-bold text-deep-blue hover:text-digital-teal">See all speakers <ArrowRight /></Link></div>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {speakers.map((speaker) => (
-              <Button key={speaker.name} variant="ghost" type="button" onClick={() => setActiveSpeaker(speaker)} className="reveal group block h-auto min-h-0 whitespace-normal p-0 text-left hover:bg-transparent">
-                <span className="block aspect-[4/5] overflow-hidden rounded-t-[50%] bg-paper"><img src={speaker.image} alt={`Portrait of ${speaker.name}`} loading="lazy" width={1024} height={1280} className="h-full w-full object-cover grayscale transition duration-500 group-hover:scale-105 group-hover:grayscale-0" /></span>
-                <span className="mt-5 block font-display text-2xl font-bold text-deep-blue">{speaker.name}</span><span className="mt-1 block text-sm text-muted-foreground">{speaker.role} · {speaker.organization}</span>
-              </Button>
-            ))}
-          </div>
+          {speakers.length > 0 ? (
+            <div className="mt-12 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+              {speakers.map((speaker) => <SpeakerCard key={speaker.slug} speaker={speaker} />)}
+            </div>
+          ) : (
+            <p className="mt-12 text-lg text-muted-foreground">Our speaker lineup will be announced soon.</p>
+          )}
         </div>
       </section>
 
       <section className="overflow-hidden bg-paper py-24 md:py-32">
         <div className="mx-auto max-w-7xl px-5"><div className="reveal grid gap-8 lg:grid-cols-2 lg:items-end"><div><p className="font-display text-sm font-bold uppercase text-signal-orange">Our partners</p><h2 className="mt-3 text-h2 text-deep-blue">Backing the builders.</h2></div><p className="max-w-xl text-muted-foreground">Organisations helping us bring Nigeria's tech community together and give emerging voices a platform.</p></div></div>
-        <div className="mt-14 border-y border-light-grey py-8"><div className="sponsor-marquee flex w-max items-center gap-12 px-6 font-display text-2xl font-bold text-deep-blue/50 md:gap-20 md:text-4xl">{["AFRICA LABS", "NOVA HEALTH", "BUILD/NG", "ORBIT CAPITAL", "NEXT SYSTEMS", "AFRICA LABS", "NOVA HEALTH", "BUILD/NG", "ORBIT CAPITAL", "NEXT SYSTEMS"].map((name, index) => <span key={`${name}-${index}`} className="whitespace-nowrap">{name}</span>)}</div></div>
+        <SponsorsPreview sponsors={sponsors} />
         <div className="mx-auto mt-10 max-w-7xl px-5"><Link to="/sponsors" className="inline-flex min-h-12 items-center gap-2 font-display font-bold text-deep-blue hover:text-digital-teal">Explore partnerships <ArrowRight /></Link></div>
       </section>
 
@@ -281,7 +246,6 @@ export function Homepage({ latestPosts }: { latestPosts: PostSummary[] }) {
         <Arcs className="pointer-events-none absolute -bottom-48 -right-32 h-[520px] w-[520px] opacity-20" />
         <div className="relative mx-auto max-w-7xl px-5"><p className="font-display text-sm font-bold uppercase">{EVENT.dateLabel} · {EVENT.timeLabel} · {EVENT.venue}</p><h2 className="mt-4 max-w-4xl text-h1">Add your voice to Nigeria's AI conversation.</h2><Button size="lg" data-register className="mt-8 min-h-12 rounded-full bg-deep-blue px-7 font-display font-bold text-paper hover:bg-ink">Register now <ArrowRight /></Button></div>
       </section>
-      {activeSpeaker && <SpeakerModal speaker={activeSpeaker} close={() => setActiveSpeaker(null)} />}
     </>
   );
 }

@@ -37,3 +37,27 @@ INSERT INTO public.blog_posts (slug, title, excerpt, content, cover_image_url, c
 SELECT 'c8-tech-summit-2026-what-we-learned', 'C8 Tech Summit 2026: what we learned', 'Highlights from our conversation on Nigeria''s AI revolution: jobs, privacy, and financial security.', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"This recap will be published after the summit. It is a scheduled post: it stays hidden until its publish date."}]},{"type":"heading","attrs":{"level":2},"content":[{"type":"text","text":"Placeholder"}]},{"type":"paragraph","content":[{"type":"text","text":"Replace this content with highlights from the event."}]}]}'::jsonb, '/blog/community.jpg', 'Attendees networking in a lively event space',
   (SELECT id FROM public.categories WHERE slug = 'community'), ARRAY['C8 Tech Summit', 'recap']::text[], false, 1, 'scheduled', '2026-10-20T09:00:00+01:00'
 ON CONFLICT (slug) DO NOTHING;
+
+INSERT INTO public.speakers (slug, name, role, organization, bio, photo_url, photo_alt, track, linkedin_url, x_url, is_featured, display_order)
+VALUES ('amara-okafor', 'Dr. Amara Okafor', 'AI Research Director', 'Placeholder Lab', 'Amara researches how AI systems are built and deployed responsibly, with a focus on data protection in African markets.', '/speakers/amara.jpg', 'Portrait of Dr. Amara Okafor', 'privacy', 'https://www.linkedin.com/', NULL, true, 0)
+ON CONFLICT (slug) DO NOTHING;
+
+INSERT INTO public.speakers (slug, name, role, organization, bio, photo_url, photo_alt, track, linkedin_url, x_url, is_featured, display_order)
+VALUES ('tunde-adebayo', 'Tunde Adebayo', 'Founder & CEO', 'Placeholder Fintech', 'Tunde builds payment infrastructure for Nigerian businesses and thinks a lot about fraud, trust, and financial inclusion.', '/speakers/tunde.jpg', 'Portrait of Tunde Adebayo', 'financial-security', NULL, 'https://x.com/', true, 1)
+ON CONFLICT (slug) DO NOTHING;
+
+INSERT INTO public.speakers (slug, name, role, organization, bio, photo_url, photo_alt, track, linkedin_url, x_url, is_featured, display_order)
+VALUES ('zainab-bello', 'Zainab Bello', 'Product Lead', 'Placeholder Studio', 'Zainab helps early-stage teams turn AI ideas into products people use, and mentors emerging builders breaking into tech.', '/speakers/zainab.jpg', 'Portrait of Zainab Bello', 'ai-and-jobs', 'https://www.linkedin.com/', NULL, true, 2)
+ON CONFLICT (slug) DO NOTHING;
+
+INSERT INTO public.speakers (slug, name, role, organization, bio, photo_url, photo_alt, track, linkedin_url, x_url, is_featured, display_order)
+VALUES ('to-be-announced-1', 'To be announced', 'Speaker', NULL, 'We''re confirming more voices for this conversation. Follow us for announcements.', NULL, NULL, 'ai-and-jobs', NULL, NULL, false, 3)
+ON CONFLICT (slug) DO NOTHING;
+
+INSERT INTO public.speakers (slug, name, role, organization, bio, photo_url, photo_alt, track, linkedin_url, x_url, is_featured, display_order)
+VALUES ('to-be-announced-2', 'To be announced', 'Speaker', NULL, 'We''re confirming more voices for this conversation. Follow us for announcements.', NULL, NULL, 'financial-security', NULL, NULL, false, 4)
+ON CONFLICT (slug) DO NOTHING;
+
+INSERT INTO public.speakers (slug, name, role, organization, bio, photo_url, photo_alt, track, linkedin_url, x_url, is_featured, display_order)
+VALUES ('to-be-announced-3', 'To be announced', 'Speaker', NULL, 'We''re confirming more voices for this conversation. Follow us for announcements.', NULL, NULL, 'nigerias-direction', NULL, NULL, false, 5)
+ON CONFLICT (slug) DO NOTHING;
