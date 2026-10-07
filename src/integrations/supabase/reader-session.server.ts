@@ -5,6 +5,7 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { createServerClient, type CookieOptionsWithName } from "@supabase/ssr";
 import { getCookies, setCookie } from "@tanstack/react-start/server";
+import { supabaseKey } from "./keys.server";
 import type { Database } from "./types";
 
 // Fixed name: in Docker the server and browser reach Supabase via different hosts,
@@ -23,8 +24,9 @@ type CookieToSet = { name: string; value: string; options: Record<string, unknow
 
 function supabaseEnv() {
   const url = process.env["SUPABASE_URL"];
-  const key = process.env["SUPABASE_PUBLISHABLE_KEY"];
-  if (!url || !key) throw new Error("Missing SUPABASE_URL or SUPABASE_PUBLISHABLE_KEY");
+  const key = supabaseKey("anon");
+  if (!url || !key)
+    throw new Error("Missing SUPABASE_URL, or SUPABASE_PUBLISHABLE_KEY / JWT_SECRET");
   return { url, key };
 }
 

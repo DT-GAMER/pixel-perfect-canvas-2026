@@ -141,6 +141,23 @@ supabase/migrations/   SQL migrations
 docker/                Local Supabase config (Postgres init, Kong gateway, migration runner)
 ```
 
-## Deployment
+## Deployment (Coolify)
 
-`docker build` produces a self-contained Node server image (see `Dockerfile`); pass `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` as build args and the remaining variables at runtime. For production, use a hosted Supabase project (or a hardened self-hosted one) rather than this local stack.
+Production uses `docker-compose.coolify.yml`: the app, Supabase Auth/REST/Storage and an internal nginx gateway, plus one-shot `bootstrap` and `migrate` containers. Only the app is public; uploaded images are served by the app at `/media/*`.
+
+1. **New resource** → your Git repository → build pack **Docker Compose**.
+2. **Docker Compose Location:** `/docker-compose.coolify.yml`.
+3. **Domains:** give the `app` service your domain (e.g. `https://c8techsummit.com`); it listens on port 3000.
+4. **Environment Variables:** set the two required secrets:
+   - `POSTGRES_PASSWORD`: superuser password of the PostgreSQL server
+   - `RESEND_API_KEY`: Resend API key
+
+   Coolify generates the JWT secret and service password automatically (`SERVICE_PASSWORD_JWT`, `SERVICE_PASSWORD_DBSERVICE`); the app signs its Supabase API keys from the JWT secret. Optional overrides: `POSTGRES_HOST` (default `62.238.60.119`), `POSTGRES_PORT` (`6000`), `SITE_URL`, `EMAIL_FROM`, `EMAIL_REPLY_TO`, `SPONSOR_ENQUIRY_EMAIL`.
+5. **First admin:** set `BOOTSTRAP_ADMIN_EMAIL` to your email, deploy, then sign in at `/admin/login`. It only works while there are no staff; clear it afterwards and invite others from **Team**.
+6. **Deploy.** The `bootstrap` and `migrate` containers run once and exit (that's expected).
+
+Notes:
+- **Run it on the same server as the database.** Against a remote database, each query costs a round trip (~1.5 s from far away); co-located, pages respond in ~10–150 ms.
+- Back up the `storage-data` volume (uploaded images) along with the database.
+- Pages, JSON and feeds are gzipped by the app; static assets are pre-compressed. The share image (`public/og-image.png`) shows the event date; regenerate it if the date changes.
+- `TRUST_PROXY=true` is set because Coolify's proxy sets `X-Forwarded-For`. If you put Cloudflare in front, rate limiting will see Cloudflare's IPs.
