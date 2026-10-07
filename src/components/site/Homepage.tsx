@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, CalendarDays, MapPin, Quote, X } from "lucide-react";
+import { ArrowRight, CalendarDays, MonitorPlay, Quote, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { EVENT } from "@/lib/event";
+import type { PostSummary } from "@/lib/blog.functions";
 import { useCountdown } from "./CountdownPill";
 import { Arcs } from "./Logo";
 import aiHealthImage from "@/assets/track-ai-health.jpg";
@@ -12,62 +13,64 @@ import communityImage from "@/assets/track-community.jpg";
 import amaraImage from "@/assets/speaker-amara.jpg";
 import tundeImage from "@/assets/speaker-tunde.jpg";
 import zainabImage from "@/assets/speaker-zainab.jpg";
-import heroImage from "@/assets/c8-summit-hero.jpeg.asset.json";
+import heroImage from "@/assets/c8-summit-hero.jpeg";
 
 const stats = [
-  { value: 1200, suffix: "+", label: "Attendees expected" },
-  { value: 35, suffix: "+", label: "Expert speakers" },
-  { value: 20, suffix: "+", label: "Sessions & workshops" },
-  { value: 15, suffix: "+", label: "Partners" },
+  { value: 500, suffix: "+", label: "Registrations expected" },
+  { value: 200, suffix: "+", label: "Live attendees" },
+  { value: 3, suffix: "", label: "Big questions: jobs, privacy, money" },
+  { value: 1, suffix: "", label: "Afternoon that brings the community together" },
 ];
 
 const tracks = [
   {
     number: "01",
-    title: "AI for human progress",
-    subtitle: "Smarter systems, better outcomes",
-    description: "Explore practical ways artificial intelligence can strengthen health, public services, and everyday life across Africa.",
-    image: aiHealthImage,
+    title: "AI and Nigerian jobs",
+    subtitle: "What changes, what grows, what to prepare for",
+    description: "Which roles will AI reshape in Nigeria, which new ones will it create, and how professionals, students, and employers can get ready now.",
+    image: entrepreneurshipImage,
     accent: "bg-digital-lime text-deep-blue",
   },
   {
     number: "02",
-    title: "Health innovation",
-    subtitle: "Technology that puts people first",
-    description: "Meet the clinicians, researchers, and builders creating accessible tools for prevention, diagnosis, and care.",
+    title: "Privacy in the age of AI",
+    subtitle: "Your data, your rights",
+    description: "From phone numbers to health records, AI runs on personal data. What does privacy mean for Nigerians, and how should products and policy protect it?",
     image: innovationImage,
     accent: "bg-digital-teal text-deep-blue",
   },
   {
     number: "03",
-    title: "Venture & enterprise",
-    subtitle: "From bold idea to lasting business",
-    description: "Learn how founders turn technical breakthroughs into trusted products, resilient teams, and investable companies.",
-    image: entrepreneurshipImage,
+    title: "Financial security",
+    subtitle: "Money, fintech, and fraud in an AI world",
+    description: "How AI is changing payments, lending, and fraud, and what individuals, businesses, and fintech builders can do to keep money safe.",
+    image: aiHealthImage,
     accent: "bg-signal-orange text-deep-blue",
   },
   {
     number: "04",
-    title: "Connected ecosystem",
-    subtitle: "The right people in one room",
-    description: "Build relationships across technology, medicine, capital, government, and creative industries that continue beyond the summit.",
+    title: "Nigeria's direction",
+    subtitle: "Every voice at the table",
+    description: "Emerging and established builders, experts, and founders on the direction Nigeria should take, and the part each of us can play.",
     image: communityImage,
     accent: "bg-light-grey text-deep-blue",
   },
 ];
 
+// Placeholder lineup until the confirmed speakers are announced.
 const speakers = [
-  { name: "Dr. Amara Okafor", role: "AI Research Director", organization: "Health Intelligence Lab", image: amaraImage, bio: "Amara leads multidisciplinary teams developing responsible AI systems for African health services and research." },
-  { name: "Tunde Adebayo", role: "Founder & CEO", organization: "MediGrid Africa", image: tundeImage, bio: "Tunde builds technology that connects patients, clinicians, and community health providers across emerging markets." },
-  { name: "Zainab Bello", role: "Venture Partner", organization: "Forward Capital", image: zainabImage, bio: "Zainab invests in ambitious African founders using technology to solve high-impact problems at scale." },
+  { name: "Dr. Amara Okafor", role: "AI Research Director", organization: "Placeholder Lab", image: amaraImage, bio: "Amara researches how AI systems are built and deployed responsibly, with a focus on data protection in African markets." },
+  { name: "Tunde Adebayo", role: "Founder & CEO", organization: "Placeholder Fintech", image: tundeImage, bio: "Tunde builds payment infrastructure for Nigerian businesses and thinks a lot about fraud, trust, and financial inclusion." },
+  { name: "Zainab Bello", role: "Product Lead", organization: "Placeholder Studio", image: zainabImage, bio: "Zainab helps early-stage teams turn AI ideas into products people use, and mentors emerging builders breaking into tech." },
 ];
 
 const faqs = [
-  ["Who is C8 Tech Summit for?", "The summit is designed for founders, builders, clinicians, researchers, investors, students, and leaders shaping Africa's technology future."],
-  ["Where will the summit take place?", "C8 Tech Summit takes place in Lagos State, Nigeria. The exact venue and arrival information will be announced closer to the event."],
-  ["What does registration include?", "Your pass will include access to keynotes, panels, workshops, product demonstrations, and curated networking sessions."],
-  ["Can my organisation become a sponsor?", "Yes. Sponsorship opportunities are available across several tiers. Visit our sponsors page to register your interest."],
-];
+  ["Who is C8 Tech Summit for?", "Anyone in, or moving into, Nigeria's tech ecosystem: founders, builders, engineers, designers, researchers, students, investors, and policy people. Emerging voices are especially welcome. Great ideas don't only come from people who have already made it."],
+  ["When and where is it?", `${EVENT.dateLabel} at ${EVENT.timeLabel}. The 2026 summit is a live virtual event, so you can join from anywhere.`],
+  ["How do I join on the day?", "Register on this site. We'll email your joining link and reminders to the address you registered with before the event starts."],
+  ["What is this year's theme?", `"${EVENT.theme}." We're bringing the global AI conversation home: what AI means for Nigerians' jobs, data, businesses, and everyday lives.`],
+  ["Can my organisation become a sponsor?", "Yes. Sponsorship and partnership opportunities are available. Visit our sponsors page or email us to start the conversation."],
+] as const;
 
 const pad = (value: number) => String(value).padStart(2, "0");
 
@@ -131,7 +134,7 @@ function SpeakerModal({ speaker, close }: { speaker: typeof speakers[number]; cl
         <img src={speaker.image} alt="" className="h-full max-h-96 w-full object-cover md:max-h-none" width={1024} height={1280} />
         <div className="p-8 md:p-10">
           <Button variant="ghost" size="icon" className="absolute right-3 top-3 min-h-12 min-w-12" onClick={close} aria-label="Close speaker profile"><X /></Button>
-          <p className="font-display text-sm font-bold uppercase text-digital-teal">Featured speaker</p>
+          <p className="font-display text-sm font-bold uppercase text-digital-teal">Speaker</p>
           <h3 id="speaker-name" className="mt-3 text-h2 text-deep-blue">{speaker.name}</h3>
           <p className="mt-3 font-display font-semibold text-ink">{speaker.role} · {speaker.organization}</p>
           <p className="mt-6 text-muted-foreground">{speaker.bio}</p>
@@ -142,13 +145,13 @@ function SpeakerModal({ speaker, close }: { speaker: typeof speakers[number]; cl
   );
 }
 
-export function Homepage() {
+export function Homepage({ latestPosts }: { latestPosts: PostSummary[] }) {
   const [activeSpeaker, setActiveSpeaker] = useState<typeof speakers[number] | null>(null);
   return (
     <>
       <section className="relative flex min-h-[calc(100svh-9.5rem)] items-end overflow-hidden bg-deep-blue text-paper">
         <img
-          src={heroImage.url}
+          src={heroImage}
           alt="A technology summit audience gathered around an illuminated stage"
           fetchPriority="high"
           width={1080}
@@ -159,9 +162,9 @@ export function Homepage() {
         <Arcs className="arc-spin pointer-events-none absolute -right-52 -top-24 h-[560px] w-[560px] opacity-20 sm:-right-36 sm:h-[680px] sm:w-[680px] md:-right-12 md:-top-28 md:h-[820px] md:w-[820px] md:opacity-30" />
         <div className="relative mx-auto w-full max-w-7xl px-5 pb-8 pt-20 md:pb-10 md:pt-28">
           <div className="max-w-4xl animate-enter-up border-l-2 border-digital-lime pl-5 md:pl-8">
-            <p className="font-display text-sm font-bold uppercase text-digital-lime">Lagos · 15 December 2026</p>
+            <p className="font-display text-sm font-bold uppercase text-digital-lime">{EVENT.venue} · {EVENT.dateLabel}</p>
             <h1 className="mt-4 text-h1 text-paper">C8 Tech<br />Summit</h1>
-            <p className="mt-5 max-w-xl text-xl font-medium text-paper/90 md:text-2xl">{EVENT.tagline}</p>
+            <p className="mt-5 max-w-2xl text-xl font-medium text-paper/90 md:text-2xl">{EVENT.edition} theme: {EVENT.theme}</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button size="lg" data-register className="min-h-12 rounded-full px-7 font-display font-bold">Register now <ArrowRight /></Button>
               <a href="#about" className="inline-flex min-h-12 items-center justify-center rounded-full border-2 border-paper/80 bg-deep-blue/25 px-7 font-display font-semibold backdrop-blur-sm transition hover:bg-paper hover:text-deep-blue">Discover the summit</a>
@@ -169,8 +172,8 @@ export function Homepage() {
           </div>
           <div className="mt-12 flex flex-col gap-6 border-t border-paper/30 bg-deep-blue/25 px-4 py-5 backdrop-blur-sm sm:px-5 lg:flex-row lg:items-end lg:justify-between">
             <div className="flex flex-wrap gap-x-8 gap-y-3 text-sm sm:text-base">
-              <span className="flex items-center gap-2"><CalendarDays className="text-digital-lime" /> 9:00 AM – 6:00 PM</span>
-              <span className="flex items-center gap-2"><MapPin className="text-digital-lime" /> Lagos State, Nigeria</span>
+              <span className="flex items-center gap-2"><CalendarDays className="text-digital-lime" /> {EVENT.dateLabel}, {EVENT.timeLabel}</span>
+              <span className="flex items-center gap-2"><MonitorPlay className="text-digital-lime" /> {EVENT.format}, join from anywhere</span>
             </div>
             <HeroCountdown />
           </div>
@@ -182,10 +185,10 @@ export function Homepage() {
           <div className="grid gap-12 lg:grid-cols-[0.7fr_1.3fr]">
             <p className="reveal font-display text-sm font-bold uppercase text-digital-teal">About C8</p>
             <div className="reveal">
-              <h2 className="max-w-4xl text-h2 text-deep-blue">Where Africa's brightest minds turn ideas into impact.</h2>
+              <h2 className="max-w-4xl text-h2 text-deep-blue">Where Nigeria's tech community comes together.</h2>
               <div className="mt-8 grid gap-6 text-muted-foreground md:grid-cols-2">
-                <p>C8 Tech Summit is a meeting point for the people imagining, building, funding, and applying the technologies shaping our future.</p>
-                <p>Across one focused day, bold ideas meet practical experience through meaningful conversations, hands-on learning, and human connection.</p>
+                <p>C8 Tech Summit is a tech community that brings people in technology together to have important conversations, share ideas, build relationships, and discover opportunities, through our annual summit, events, and year-round activities.</p>
+                <p>Most tech events spotlight people who have already made it. C8 gives emerging builders, experts, and founders the stage too, alongside established leaders, so different voices can help shape the future of technology in Nigeria and Africa.</p>
               </div>
             </div>
           </div>
@@ -203,12 +206,12 @@ export function Homepage() {
       <section id="theme" className="scroll-mt-20 bg-digital-teal py-24 text-deep-blue md:py-32">
         <div className="mx-auto max-w-7xl px-5">
           <div className="grid gap-10 lg:grid-cols-2 lg:items-end">
-            <div className="reveal"><p className="font-display text-sm font-bold uppercase">2026 theme</p><h2 className="mt-4 text-h2">Intelligence with intention.</h2></div>
-            <p className="reveal max-w-xl text-lg">A programme about building technology that is ambitious, responsible, commercially viable, and deeply useful to people.</p>
+            <div className="reveal"><p className="font-display text-sm font-bold uppercase">{EVENT.edition} theme</p><h2 className="mt-4 text-h2">{EVENT.themeShort}.</h2></div>
+            <p className="reveal max-w-xl text-lg">AI is a global conversation, but much of it is shaped by experiences outside Nigeria. We're bringing it home: what AI means for our jobs, our privacy, our money, and the direction Nigeria should take.</p>
           </div>
           <div className="mt-14 overflow-hidden border-y border-deep-blue/25 py-5" aria-label="Programme formats">
             <div className="programme-ticker flex w-max gap-8 font-display text-3xl font-bold md:text-5xl">
-              {["Keynotes", "Workshops", "Panels", "Networking", "Demos", "Keynotes", "Workshops", "Panels", "Networking", "Demos"].map((item, i) => <span key={`${item}-${i}`} className={i % 5 === 2 ? "text-digital-lime" : "text-deep-blue/45"}>{item} <span aria-hidden="true">·</span></span>)}
+              {["Keynotes", "Panels", "Fireside chats", "Live Q&A", "Networking", "Keynotes", "Panels", "Fireside chats", "Live Q&A", "Networking"].map((item, i) => <span key={`${item}-${i}`} className={i % 5 === 2 ? "text-digital-lime" : "text-deep-blue/45"}>{item} <span aria-hidden="true">·</span></span>)}
             </div>
           </div>
           <div className="mt-16">
@@ -217,7 +220,7 @@ export function Homepage() {
                 <img src={track.image} alt="" loading="lazy" width={1536} height={1024} className="absolute inset-0 h-full w-full object-cover" />
                 <div className="absolute inset-0 bg-ink/70" />
                 <div className="relative flex min-h-[460px] flex-col justify-between p-7 text-paper md:p-12">
-                  <div className="flex items-start justify-between gap-4"><span className={`rounded-full px-4 py-2 font-display text-sm font-bold ${track.accent}`}>{track.number}</span><span className="font-display text-sm uppercase text-paper/70">Summit track</span></div>
+                  <div className="flex items-start justify-between gap-4"><span className={`rounded-full px-4 py-2 font-display text-sm font-bold ${track.accent}`}>{track.number}</span><span className="font-display text-sm uppercase text-paper/70">Conversation</span></div>
                   <div className="max-w-3xl"><p className="font-display font-semibold text-digital-lime">{track.subtitle}</p><h3 className="mt-3 text-h2">{track.title}</h3><p className="mt-5 max-w-2xl text-paper/80">{track.description}</p></div>
                 </div>
               </article>
@@ -228,7 +231,7 @@ export function Homepage() {
 
       <section className="bg-light-grey py-24 md:py-32">
         <div className="mx-auto max-w-7xl px-5">
-          <div className="reveal flex flex-col gap-5 md:flex-row md:items-end md:justify-between"><div><p className="font-display text-sm font-bold uppercase text-digital-teal">On the stage</p><h2 className="mt-3 text-h2 text-deep-blue">Ideas worth gathering for.</h2></div><Link to="/speakers" className="inline-flex min-h-12 items-center gap-2 font-display font-bold text-deep-blue hover:text-digital-teal">See all speakers <ArrowRight /></Link></div>
+          <div className="reveal flex flex-col gap-5 md:flex-row md:items-end md:justify-between"><div><p className="font-display text-sm font-bold uppercase text-digital-teal">On the stage</p><h2 className="mt-3 text-h2 text-deep-blue">Voices shaping the conversation.</h2></div><Link to="/speakers" className="inline-flex min-h-12 items-center gap-2 font-display font-bold text-deep-blue hover:text-digital-teal">See all speakers <ArrowRight /></Link></div>
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {speakers.map((speaker) => (
               <Button key={speaker.name} variant="ghost" type="button" onClick={() => setActiveSpeaker(speaker)} className="reveal group block h-auto min-h-0 whitespace-normal p-0 text-left hover:bg-transparent">
@@ -241,17 +244,25 @@ export function Homepage() {
       </section>
 
       <section className="overflow-hidden bg-paper py-24 md:py-32">
-        <div className="mx-auto max-w-7xl px-5"><div className="reveal grid gap-8 lg:grid-cols-2 lg:items-end"><div><p className="font-display text-sm font-bold uppercase text-signal-orange">Our partners</p><h2 className="mt-3 text-h2 text-deep-blue">Backing the builders.</h2></div><p className="max-w-xl text-muted-foreground">Forward-looking organisations helping create the room where technology, enterprise, and human progress meet.</p></div></div>
+        <div className="mx-auto max-w-7xl px-5"><div className="reveal grid gap-8 lg:grid-cols-2 lg:items-end"><div><p className="font-display text-sm font-bold uppercase text-signal-orange">Our partners</p><h2 className="mt-3 text-h2 text-deep-blue">Backing the builders.</h2></div><p className="max-w-xl text-muted-foreground">Organisations helping us bring Nigeria's tech community together and give emerging voices a platform.</p></div></div>
         <div className="mt-14 border-y border-light-grey py-8"><div className="sponsor-marquee flex w-max items-center gap-12 px-6 font-display text-2xl font-bold text-deep-blue/50 md:gap-20 md:text-4xl">{["AFRICA LABS", "NOVA HEALTH", "BUILD/NG", "ORBIT CAPITAL", "NEXT SYSTEMS", "AFRICA LABS", "NOVA HEALTH", "BUILD/NG", "ORBIT CAPITAL", "NEXT SYSTEMS"].map((name, index) => <span key={`${name}-${index}`} className="whitespace-nowrap">{name}</span>)}</div></div>
         <div className="mx-auto mt-10 max-w-7xl px-5"><Link to="/sponsors" className="inline-flex min-h-12 items-center gap-2 font-display font-bold text-deep-blue hover:text-digital-teal">Explore partnerships <ArrowRight /></Link></div>
       </section>
 
       <section className="bg-deep-blue py-24 text-paper md:py-32">
         <div className="mx-auto max-w-7xl px-5">
-          <div className="reveal flex flex-col gap-5 md:flex-row md:items-end md:justify-between"><div><p className="font-display text-sm font-bold uppercase text-digital-lime">Latest thinking</p><h2 className="mt-3 text-h2">Ideas before the stage.</h2></div><Link to="/blog" className="inline-flex min-h-12 items-center gap-2 font-display font-bold text-paper hover:text-digital-lime">Read all stories <ArrowRight /></Link></div>
+          <div className="reveal flex flex-col gap-5 md:flex-row md:items-end md:justify-between"><div><p className="font-display text-sm font-bold uppercase text-digital-lime">Latest thinking</p><h2 className="mt-3 text-h2">Ideas before the summit.</h2></div><Link to="/blog" className="inline-flex min-h-12 items-center gap-2 font-display font-bold text-paper hover:text-digital-lime">Read all stories <ArrowRight /></Link></div>
           <div className="mt-12 grid gap-px bg-paper/20 md:grid-cols-3">
-            {[{ tag: "Artificial intelligence", title: "Why Africa's next AI chapter must be built with intention", date: "8 min read" }, { tag: "Health technology", title: "The systems helping care travel further", date: "6 min read" }, { tag: "Founder stories", title: "What resilient technology companies do differently", date: "5 min read" }].map((post, index) => (
-              <article key={post.title} className="reveal flex min-h-80 flex-col justify-between bg-deep-blue p-7 transition hover:bg-ink"><div><span className="font-display text-sm font-bold text-digital-lime">0{index + 1} · {post.tag}</span><h3 className="mt-5 text-h3">{post.title}</h3></div><div className="flex items-center justify-between text-sm text-paper/65"><span>{post.date}</span><ArrowRight /></div></article>
+            {latestPosts.map((post, index) => (
+              <article key={post.slug} className="reveal group relative flex min-h-80 flex-col justify-between bg-deep-blue p-7 transition focus-within:ring-4 focus-within:ring-inset focus-within:ring-signal-orange hover:bg-ink">
+                <div>
+                  <span className="font-display text-sm font-bold text-digital-lime">0{index + 1} · {post.category?.name ?? "Article"}</span>
+                  <h3 className="mt-5 text-h3">
+                    <Link to="/blog/$slug" params={{ slug: post.slug }} className="after:absolute after:inset-0 focus-visible:outline-none">{post.title}</Link>
+                  </h3>
+                </div>
+                <div className="flex items-center justify-between text-sm text-paper/65"><span>{post.readingMinutes} min read</span><ArrowRight className="transition group-hover:translate-x-1" aria-hidden="true" /></div>
+              </article>
             ))}
           </div>
         </div>
@@ -268,7 +279,7 @@ export function Homepage() {
 
       <section className="relative overflow-hidden bg-signal-orange py-24 text-deep-blue md:py-32">
         <Arcs className="pointer-events-none absolute -bottom-48 -right-32 h-[520px] w-[520px] opacity-20" />
-        <div className="relative mx-auto max-w-7xl px-5"><p className="font-display text-sm font-bold uppercase">One day. A room full of possibility.</p><h2 className="mt-4 max-w-4xl text-h1">Be part of what's next.</h2><Button size="lg" data-register className="mt-8 min-h-12 rounded-full bg-deep-blue px-7 font-display font-bold text-paper hover:bg-ink">Register now <ArrowRight /></Button></div>
+        <div className="relative mx-auto max-w-7xl px-5"><p className="font-display text-sm font-bold uppercase">{EVENT.dateLabel} · {EVENT.timeLabel} · {EVENT.venue}</p><h2 className="mt-4 max-w-4xl text-h1">Add your voice to Nigeria's AI conversation.</h2><Button size="lg" data-register className="mt-8 min-h-12 rounded-full bg-deep-blue px-7 font-display font-bold text-paper hover:bg-ink">Register now <ArrowRight /></Button></div>
       </section>
       {activeSpeaker && <SpeakerModal speaker={activeSpeaker} close={() => setActiveSpeaker(null)} />}
     </>

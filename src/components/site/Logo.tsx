@@ -1,7 +1,7 @@
-import logoDark from "@/assets/c8-logo-dark.svg.asset.json";
+import logoDark from "@/assets/c8-logo-dark.svg";
 
 export function LogoMark({ className = "h-10 w-10" }: { className?: string }) {
-  return <img src={logoDark.url} alt="" className={`${className} rounded-sm object-cover`} width={48} height={48} />;
+  return <img src={logoDark} alt="" className={`${className} rounded-sm object-cover`} width={48} height={48} />;
 }
 
 export function Arcs({ className = "" }: { className?: string }) {

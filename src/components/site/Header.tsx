@@ -28,7 +28,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 bg-deep-blue text-paper">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-5">
-        <Link to="/" className="flex items-center gap-3 font-display text-lg font-bold">
+        <Link to="/" className="flex min-h-12 items-center gap-3 font-display text-lg font-bold">
           <LogoMark />
           <span>{EVENT.name}</span>
         </Link>
