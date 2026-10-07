@@ -25,6 +25,7 @@ import {
 import { SPONSOR_TIERS, tierName } from "@/lib/sponsorship";
 import { PageHeader } from "./AdminShell";
 import { DeleteButton, ImageField, SortableList, adminInput, adminSelect } from "./fields";
+import { errorMessage, onInvalid } from "./form-errors";
 import { StatusBadge } from "./Overview";
 
 type Data = Awaited<ReturnType<typeof sponsorsDashboard>>;
@@ -264,9 +265,9 @@ function SponsorDialog({
       onClose();
       await router.invalidate();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Couldn't save the sponsor");
+      toast.error(errorMessage(error, "Couldn't save the sponsor"));
     }
-  });
+  }, onInvalid);
 
   return (
     <Dialog open onOpenChange={(open) => !open && onClose()}>

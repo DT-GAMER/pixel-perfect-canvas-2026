@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { SLUG_PATTERN } from "@/lib/slug";
 import { TRACKS } from "@/lib/tracks";
+import { imageUrl } from "./image-url";
 
 const trackSlugs = TRACKS.map((track) => track.slug) as [string, ...string[]];
 
@@ -35,7 +36,7 @@ export const speakerFormSchema = z
     organization: optionalText(100),
     bio: optionalText(2000),
     track: z.union([z.enum(trackSlugs), z.literal("")]).transform((value) => value || null),
-    photoUrl: z.string().url().nullable(),
+    photoUrl: imageUrl,
     photoAlt: z.string().trim().max(200),
     linkedinUrl: optionalHttps("LinkedIn"),
     xUrl: optionalHttps("X"),

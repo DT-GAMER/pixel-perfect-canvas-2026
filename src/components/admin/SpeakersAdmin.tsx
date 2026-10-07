@@ -23,6 +23,7 @@ import { slugify } from "@/lib/slug";
 import { TRACKS, trackName } from "@/lib/tracks";
 import { PageHeader } from "./AdminShell";
 import { DeleteButton, ImageField, SortableList, adminInput, adminSelect } from "./fields";
+import { errorMessage, onInvalid } from "./form-errors";
 
 export function SpeakersAdmin({ speakers }: { speakers: AdminSpeaker[] }) {
   const router = useRouter();
@@ -223,9 +224,9 @@ function SpeakerDialog({
       onClose();
       await router.invalidate();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Couldn't save the speaker");
+      toast.error(errorMessage(error, "Couldn't save the speaker"));
     }
-  });
+  }, onInvalid);
 
   const text = (
     field: "role" | "organization" | "linkedinUrl" | "xUrl" | "instagramUrl" | "websiteUrl",

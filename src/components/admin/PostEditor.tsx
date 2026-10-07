@@ -19,6 +19,7 @@ import { previewBlocks, type RichDoc, type RichNode } from "@/lib/rich-text";
 import { slugify } from "@/lib/slug";
 import { PageHeader } from "./AdminShell";
 import { ImageField, adminInput, adminSelect } from "./fields";
+import { errorMessage, onInvalid } from "./form-errors";
 
 // Tiptap only runs in the browser; load it separately from the rest of the page.
 const RichTextEditor = lazy(() =>
@@ -81,21 +82,18 @@ export function PostEditor({ data, defaultAuthor }: { data: Data; defaultAuthor:
   const status = watch("status");
   const title = register("title");
 
-  const submit = handleSubmit(
-    async (values) => {
-      try {
-        const { id } = await save({ data: { ...values, content: content as RichDoc } });
-        toast.success(post ? "Post saved" : "Post created");
-        setContentDirty(false);
-        reset(values);
-        if (!post) await navigate({ to: "/admin/blog/$id", params: { id }, replace: true });
-        else await router.invalidate();
-      } catch (error) {
-        toast.error(error instanceof Error ? error.message : "Couldn't save the post");
-      }
-    },
-    () => toast.error("Check the highlighted fields"),
-  );
+  const submit = handleSubmit(async (values) => {
+    try {
+      const { id } = await save({ data: { ...values, content: content as RichDoc } });
+      toast.success(post ? "Post saved" : "Post created");
+      setContentDirty(false);
+      reset(values);
+      if (!post) await navigate({ to: "/admin/blog/$id", params: { id }, replace: true });
+      else await router.invalidate();
+    } catch (error) {
+      toast.error(errorMessage(error, "Couldn't save the post"));
+    }
+  }, onInvalid);
 
   return (
     <form onSubmit={submit} noValidate>

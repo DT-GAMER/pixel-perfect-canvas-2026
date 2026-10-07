@@ -20,6 +20,7 @@ import {
 } from "@/lib/admin/faqs.functions";
 import { PageHeader } from "./AdminShell";
 import { DeleteButton, SortableList, adminInput } from "./fields";
+import { errorMessage, onInvalid } from "./form-errors";
 
 export function FaqsAdmin({ faqs }: { faqs: AdminFaq[] }) {
   const router = useRouter();
@@ -139,10 +140,10 @@ function FaqEditor({ faq, onDone }: { faq: AdminFaq | null; onDone: () => void }
       toast.success(faq ? "Question updated" : "Question added");
       onDone();
       await router.invalidate();
-    } catch {
-      toast.error("Couldn't save the question");
+    } catch (error) {
+      toast.error(errorMessage(error, "Couldn't save the question"));
     }
-  });
+  }, onInvalid);
 
   return (
     <form onSubmit={submit} noValidate className="space-y-4">

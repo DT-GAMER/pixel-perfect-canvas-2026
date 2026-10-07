@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { SPONSOR_TIERS } from "@/lib/sponsorship";
+import { imageUrl } from "./image-url";
 
 const tierSlugs = [
   "headline",
@@ -31,7 +32,7 @@ export const sponsorFormSchema = z
       .trim()
       .max(600, "Keep it under 600 characters")
       .transform((value) => value || null),
-    logoUrl: z.string().url().nullable(),
+    logoUrl: imageUrl,
     logoAlt: z.string().trim().max(200),
     isVisible: z.boolean(),
   })

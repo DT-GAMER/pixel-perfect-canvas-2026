@@ -19,6 +19,7 @@ import {
 import type { RichDoc } from "@/lib/rich-text";
 import { PageHeader } from "./AdminShell";
 import { adminInput } from "./fields";
+import { errorMessage, onInvalid } from "./form-errors";
 
 const RichTextEditor = lazy(() =>
   import("./RichTextEditor").then((module) => ({ default: module.RichTextEditor })),
@@ -57,19 +58,16 @@ function EventSettings({ form }: { form: SettingsForm }) {
   });
   const stats = useFieldArray({ control, name: "stats" });
 
-  const submit = handleSubmit(
-    async (values) => {
-      try {
-        await save({ data: values });
-        reset(values);
-        toast.success("Settings saved");
-        await router.invalidate();
-      } catch (error) {
-        toast.error(error instanceof Error ? error.message : "Couldn't save settings");
-      }
-    },
-    () => toast.error("Check the highlighted fields"),
-  );
+  const submit = handleSubmit(async (values) => {
+    try {
+      await save({ data: values });
+      reset(values);
+      toast.success("Settings saved");
+      await router.invalidate();
+    } catch (error) {
+      toast.error(errorMessage(error, "Couldn't save settings"));
+    }
+  }, onInvalid);
 
   const text = (
     name: keyof SettingsForm,

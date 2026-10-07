@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { SLUG_PATTERN } from "@/lib/slug";
+import { imageUrl } from "./image-url";
 
 export const POST_STATUSES = ["draft", "published", "scheduled"] as const;
 
@@ -26,7 +27,7 @@ export const postFormSchema = z
       .regex(SLUG_PATTERN, "Use lowercase letters, numbers, and hyphens"),
     excerpt: z.string().trim().min(10, "Write a short excerpt (at least 10 characters)").max(400),
     content: docSchema,
-    coverImageUrl: z.string().url().nullable(),
+    coverImageUrl: imageUrl,
     coverImageAlt: z.string().trim().max(200),
     categoryId: z.union([z.string().uuid(), z.literal("")]).transform((value) => value || null),
     tags: z
