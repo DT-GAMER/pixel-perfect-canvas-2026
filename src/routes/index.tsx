@@ -4,6 +4,7 @@ import { Homepage } from "@/components/site/Homepage";
 import { latestPosts } from "@/lib/blog.functions";
 import { featuredSpeakers } from "@/lib/speakers.functions";
 import { listSponsors } from "@/lib/sponsors.functions";
+import { listFaqs } from "@/lib/faqs.functions";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -21,17 +22,18 @@ export const Route = createFileRoute("/")({
     links: [{ rel: "canonical", href: "/" }],
   }),
   loader: async () => {
-    const [posts, speakers, sponsors] = await Promise.all([
+    const [posts, speakers, sponsors, faqs] = await Promise.all([
       latestPosts(),
       featuredSpeakers(),
       listSponsors(),
+      listFaqs(),
     ]);
-    return { posts, speakers, sponsors };
+    return { posts, speakers, sponsors, faqs };
   },
   component: IndexRoute,
 });
 
 function IndexRoute() {
-  const { posts, speakers, sponsors } = Route.useLoaderData();
-  return <Homepage latestPosts={posts} speakers={speakers} sponsors={sponsors} />;
+  const { posts, speakers, sponsors, faqs } = Route.useLoaderData();
+  return <Homepage latestPosts={posts} speakers={speakers} sponsors={sponsors} faqs={faqs} />;
 }

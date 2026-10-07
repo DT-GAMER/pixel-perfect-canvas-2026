@@ -115,6 +115,36 @@ export type Database = {
         }
         Relationships: []
       }
+      faqs: {
+        Row: {
+          answer: string
+          created_at: string
+          display_order: number
+          id: string
+          is_published: boolean
+          question: string
+          updated_at: string
+        }
+        Insert: {
+          answer: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_published?: boolean
+          question: string
+          updated_at?: string
+        }
+        Update: {
+          answer?: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_published?: boolean
+          question?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -397,8 +427,8 @@ export type Database = {
       }
       consume_registration_attempt: {
         Args: {
-          p_window_seconds?: number
           p_key_hash: string
+          p_window_seconds?: number
           p_max_attempts?: number
         }
         Returns: boolean

@@ -6,6 +6,7 @@ import { EVENT } from "@/lib/event";
 import type { PostSummary } from "@/lib/blog.functions";
 import type { Speaker } from "@/lib/speakers.functions";
 import type { Sponsor } from "@/lib/sponsors.functions";
+import type { Faq } from "@/lib/faqs.functions";
 import { SpeakerCard } from "./SpeakerCard";
 import { SponsorsPreview } from "./SponsorsPreview";
 import { useCountdown } from "./CountdownPill";
@@ -58,14 +59,6 @@ const tracks = [
   },
 ];
 
-const faqs = [
-  ["Who is C8 Tech Summit for?", "Anyone in, or moving into, Nigeria's tech ecosystem: founders, builders, engineers, designers, researchers, students, investors, and policy people. Emerging voices are especially welcome. Great ideas don't only come from people who have already made it."],
-  ["When and where is it?", `${EVENT.dateLabel} at ${EVENT.timeLabel}. The 2026 summit is a live virtual event, so you can join from anywhere.`],
-  ["How do I join on the day?", "Register on this site. We'll email your joining link and reminders to the address you registered with before the event starts."],
-  ["What is this year's theme?", `"${EVENT.theme}." We're bringing the global AI conversation home: what AI means for Nigerians' jobs, data, businesses, and everyday lives.`],
-  ["Can my organisation become a sponsor?", "Yes. Sponsorship and partnership opportunities are available. Visit our sponsors page or email us to start the conversation."],
-] as const;
-
 const pad = (value: number) => String(value).padStart(2, "0");
 
 function HeroCountdown() {
@@ -110,9 +103,9 @@ function CountUp({ value, suffix }: { value: number; suffix: string }) {
   return <span ref={ref}>{display.toLocaleString()}{suffix}</span>;
 }
 
-type Props = { latestPosts: PostSummary[]; speakers: Speaker[]; sponsors: Sponsor[] };
+type Props = { latestPosts: PostSummary[]; speakers: Speaker[]; sponsors: Sponsor[]; faqs: Faq[] };
 
-export function Homepage({ latestPosts, speakers, sponsors }: Props) {
+export function Homepage({ latestPosts, speakers, sponsors, faqs }: Props) {
   return (
     <>
       <section className="relative flex min-h-[calc(100svh-9.5rem)] items-end overflow-hidden bg-deep-blue text-paper">
@@ -233,14 +226,16 @@ export function Homepage({ latestPosts, speakers, sponsors }: Props) {
         </div>
       </section>
 
+      {faqs.length > 0 && (
       <section id="faq" className="scroll-mt-20 bg-light-grey py-24 md:py-32">
         <div className="mx-auto grid max-w-7xl gap-12 px-5 lg:grid-cols-[0.7fr_1.3fr]">
           <div className="reveal"><p className="font-display text-sm font-bold uppercase text-digital-teal">Good to know</p><h2 className="mt-3 text-h2 text-deep-blue">Questions,<br />answered.</h2><Quote className="mt-8 h-12 w-12 text-signal-orange" /></div>
           <div className="reveal divide-y divide-deep-blue/20 border-y border-deep-blue/20">
-            {faqs.map(([question, answer]) => <details key={question} className="group py-2"><summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 font-display text-lg font-bold text-deep-blue"><span>{question}</span><span className="text-2xl transition group-open:rotate-45">+</span></summary><p className="max-w-2xl pb-6 pr-10 text-muted-foreground">{answer}</p></details>)}
+            {faqs.map(({ id, question, answer }) => <details key={id} className="group py-2"><summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 font-display text-lg font-bold text-deep-blue"><span>{question}</span><span className="text-2xl transition group-open:rotate-45">+</span></summary><p className="max-w-2xl pb-6 pr-10 text-muted-foreground">{answer}</p></details>)}
           </div>
         </div>
       </section>
+      )}
 
       <section className="relative overflow-hidden bg-signal-orange py-24 text-deep-blue md:py-32">
         <Arcs className="pointer-events-none absolute -bottom-48 -right-32 h-[520px] w-[520px] opacity-20" />
