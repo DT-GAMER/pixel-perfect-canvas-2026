@@ -1,12 +1,15 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
+/* Self-hosted variable fonts (no third-party requests; only needed subsets load). */
+@import "@fontsource-variable/space-grotesk";
+@import "@fontsource-variable/plus-jakarta-sans";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk Variable", "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -33,6 +36,7 @@
   /* Brand palette */
   --color-deep-blue: var(--deep-blue);
   --color-digital-teal: var(--digital-teal);
+  --color-teal-ink: var(--teal-ink);
   --color-signal-orange: var(--signal-orange);
   --color-digital-lime: var(--digital-lime);
   --color-light-grey: var(--light-grey);
@@ -44,6 +48,8 @@
   --radius: 0.75rem;
   --deep-blue: oklch(0.255 0.135 263);   /* #001F65 */
   --digital-teal: oklch(0.65 0.13 170);  /* #00AC8A */
+  /* Darker teal for small text: 5.9:1 on white, 4.8:1 on light grey (WCAG AA). */
+  --teal-ink: #00725b;
   --signal-orange: oklch(0.69 0.19 40);  /* #FF6B35 */
   --digital-lime: oklch(0.86 0.21 125);  /* #B8E600 */
   --light-grey: oklch(0.93 0.004 85);    /* #EBEAE7 */
@@ -103,7 +109,9 @@
 @keyframes arc-spin { to { transform: rotate(360deg); } }
 
 @utility animate-enter-up { animation: enter-up 0.8s ease-out both; }
-@keyframes enter-up { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+/* Slide only (no fade): the hero headline is the largest paint, and an
+   invisible start would delay it. */
+@keyframes enter-up { from { transform: translateY(24px); } to { transform: translateY(0); } }
 
 .arc-draw { stroke-dasharray: 900; animation: draw-arc 1.8s ease-out both; }
 .arc-delay { animation-delay: 0.25s; }
@@ -114,7 +122,9 @@
 .sponsor-marquee { animation: ticker 32s linear infinite; }
 @keyframes ticker { to { transform: translateX(-50%); } }
 
-.reveal { animation: reveal-up linear both; animation-timeline: view(); animation-range: entry 5% cover 28%; }
+/* Finish as soon as the element is fully on screen, so anything visible on
+   load (or resting on screen) is never left half-faded. */
+.reveal { animation: reveal-up linear both; animation-timeline: view(); animation-range: entry 0% entry 100%; }
 @keyframes reveal-up { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 
 @media (prefers-reduced-motion: reduce) {

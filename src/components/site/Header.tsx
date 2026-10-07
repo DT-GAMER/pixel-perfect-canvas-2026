@@ -28,20 +28,32 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 bg-deep-blue text-paper">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-5">
-        <Link to="/" className="flex items-center gap-3 font-display text-lg font-bold">
+        <Link to="/" className="flex min-h-12 items-center gap-3 font-display text-lg font-bold">
           <LogoMark />
           <span>{EVENT.name}</span>
         </Link>
-        <nav aria-label="Main" className="hidden items-center gap-6 font-display font-medium lg:flex">
+        <nav
+          aria-label="Main"
+          className="hidden items-center gap-6 font-display font-medium lg:flex"
+        >
           {links.map((l) => (
-            <Link key={l.label} to={l.to} {...("hash" in l ? { hash: l.hash } : {})} className="hover:text-digital-lime">
+            <Link
+              key={l.label}
+              to={l.to}
+              {...("hash" in l ? { hash: l.hash } : {})}
+              className="hover:text-digital-lime"
+            >
               {l.label}
             </Link>
           ))}
         </nav>
         <div className="hidden items-center gap-3 lg:flex">
-          <Link to="/sponsors" className={btnOutline}>Become a Sponsor</Link>
-          <Button type="button" data-register className={btnPrimary}>Register</Button>
+          <Link to="/sponsors" className={btnOutline}>
+            Become a Sponsor
+          </Link>
+          <Button type="button" data-register className={btnPrimary}>
+            Register
+          </Button>
         </div>
         <Button
           type="button"
@@ -69,8 +81,12 @@ export function Header() {
             </Link>
           ))}
           <div className="mt-6 flex flex-col gap-3">
-            <Link to="/sponsors" onClick={() => setOpen(false)} className={btnOutline}>Become a Sponsor</Link>
-            <Button type="button" data-register className={btnPrimary}>Register</Button>
+            <Link to="/sponsors" onClick={() => setOpen(false)} className={btnOutline}>
+              Become a Sponsor
+            </Link>
+            <Button type="button" data-register className={btnPrimary}>
+              Register
+            </Button>
           </div>
         </div>
       )}

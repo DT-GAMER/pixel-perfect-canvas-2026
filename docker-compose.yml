@@ -1,0 +1,271 @@
+# The C8 Tech Summit app plus a self-hosted Supabase subset (Auth, REST, Storage,
+# Studio) on top of PostgreSQL, and Mailpit to catch outgoing email locally.
+#
+#   npm run setup            # once: writes .env with fresh secrets
+#   docker compose up -d     # everything, app on http://localhost:3000
+#   npm run services:up      # backend only, then `npm run dev` for hot reload
+#
+# The database is whatever POSTGRES_HOST points at (see .env). To use a throwaway
+# local database instead, set POSTGRES_HOST=db and add `--profile local-db`.
+
+name: c8-tech-summit
+
+# Superuser connection: bootstrap, migrations, and the Studio/meta dashboard.
+x-db-admin-url: &db-admin-url postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT:-5432}/${POSTGRES_DB:-postgres}
+
+x-needs-bootstrap: &needs-bootstrap
+  bootstrap:
+    condition: service_completed_successfully
+
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    environment:
+      SITE_URL: ${SITE_URL}
+      # Server-side calls go straight to the gateway on the compose network.
+      SUPABASE_URL: http://kong:8000
+      # Browser-facing Supabase URL, used for public links to uploaded files.
+      SUPABASE_PUBLIC_URL: ${API_EXTERNAL_URL}
+      SUPABASE_PUBLISHABLE_KEY: ${ANON_KEY}
+      SUPABASE_SERVICE_ROLE_KEY: ${SERVICE_ROLE_KEY}
+      # Verifies session tokens locally (no Auth round trip per request).
+      JWT_SECRET: ${JWT_SECRET}
+      # Resend when RESEND_API_KEY is set; otherwise SMTP to Mailpit.
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      EMAIL_FROM: ${EMAIL_FROM}
+      EMAIL_REPLY_TO: ${EMAIL_REPLY_TO:-}
+      SPONSOR_ENQUIRY_EMAIL: ${SPONSOR_ENQUIRY_EMAIL:-}
+      SMTP_HOST: mailpit
+      SMTP_PORT: 1025
+      TRUST_PROXY: ${TRUST_PROXY:-false}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      kong:
+        condition: service_started
+
+  # Optional local database (profile: local-db). Set POSTGRES_HOST=db,
+  # POSTGRES_USER=supabase_admin to use it.
+  db:
+    image: supabase/postgres:15.8.1.060
+    profiles: [local-db]
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${LOCAL_DB_PORT:-54322}:5432"
+    environment:
+      POSTGRES_HOST: /var/run/postgresql
+      PGPORT: 5432
+      POSTGRES_PORT: 5432
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: postgres
+      POSTGRES_DB: postgres
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXP: 3600
+    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf", "-c", "log_min_messages=fatal"]
+    volumes:
+      - ./docker/db/jwt.sql:/docker-entrypoint-initdb.d/init-scripts/99-jwt.sql:ro
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # Creates the roles and schemas the Supabase services need (idempotent).
+  bootstrap:
+    image: supabase/postgres:15.8.1.060
+    entrypoint: ["sh", "-c", "until pg_isready -d \"$$DATABASE_URL\" -q; do sleep 1; done; psql \"$$DATABASE_URL\" -X -q -v svc_pass=\"$$DB_SERVICE_PASSWORD\" -f /bootstrap.sql"]
+    environment:
+      DATABASE_URL: *db-admin-url
+      DB_SERVICE_PASSWORD: ${DB_SERVICE_PASSWORD}
+    volumes:
+      - ./docker/db/bootstrap.sql:/bootstrap.sql:ro
+    depends_on:
+      db:
+        condition: service_healthy
+        required: false
+
+  # Applies supabase/migrations/*.sql once each, tracked in
+  # supabase_migrations.schema_migrations (same table the Supabase CLI uses).
+  migrate:
+    image: supabase/postgres:15.8.1.060
+    entrypoint: ["sh", "/scripts/migrate.sh"]
+    environment:
+      DATABASE_URL: *db-admin-url
+    volumes:
+      - ./docker/db/migrate.sh:/scripts/migrate.sh:ro
+      - ./supabase/migrations:/migrations:ro
+      - ./supabase/seed.sql:/seed.sql:ro
+    depends_on:
+      <<: *needs-bootstrap
+      auth:
+        condition: service_healthy
+      storage:
+        condition: service_healthy
+
+  auth:
+    image: supabase/gotrue:v2.177.0
+    restart: unless-stopped
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: 9999
+      # Headroom for first sign-ins (several writes) when the database is remote.
+      GOTRUE_API_MAX_REQUEST_DURATION: 30s
+      API_EXTERNAL_URL: ${API_EXTERNAL_URL}
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:${DB_SERVICE_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT:-5432}/${POSTGRES_DB:-postgres}
+      GOTRUE_SITE_URL: ${SITE_URL}
+      GOTRUE_URI_ALLOW_LIST: ${ADDITIONAL_REDIRECT_URLS:-}
+      GOTRUE_DISABLE_SIGNUP: "false"
+      GOTRUE_JWT_ADMIN_ROLES: service_role
+      GOTRUE_JWT_AUD: authenticated
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_JWT_EXP: 3600
+      GOTRUE_JWT_SECRET: ${JWT_SECRET}
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: "true"
+      GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED: "false"
+      GOTRUE_MAILER_AUTOCONFIRM: "false"
+      GOTRUE_EXTERNAL_PHONE_ENABLED: "false"
+      GOTRUE_SMTP_ADMIN_EMAIL: ${AUTH_SMTP_ADMIN_EMAIL:-hello@c8techsummit.local}
+      GOTRUE_SMTP_HOST: ${AUTH_SMTP_HOST:-mailpit}
+      GOTRUE_SMTP_PORT: ${AUTH_SMTP_PORT:-1025}
+      GOTRUE_SMTP_USER: ${AUTH_SMTP_USER:-local}
+      GOTRUE_SMTP_PASS: ${AUTH_SMTP_PASS:-local}
+      GOTRUE_SMTP_SENDER_NAME: C8 Tech Summit
+      GOTRUE_MAILER_URLPATHS_INVITE: /auth/v1/verify
+      GOTRUE_MAILER_URLPATHS_CONFIRMATION: /auth/v1/verify
+      GOTRUE_MAILER_URLPATHS_RECOVERY: /auth/v1/verify
+      GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE: /auth/v1/verify
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:9999/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    depends_on:
+      bootstrap:
+        condition: service_completed_successfully
+
+  rest:
+    image: postgrest/postgrest:v12.2.12
+    restart: unless-stopped
+    command: ["postgrest"]
+    environment:
+      PGRST_DB_URI: postgres://authenticator:${DB_SERVICE_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT:-5432}/${POSTGRES_DB:-postgres}
+      PGRST_DB_SCHEMAS: public,storage,graphql_public
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+      PGRST_DB_USE_LEGACY_GUCS: "false"
+      PGRST_APP_SETTINGS_JWT_SECRET: ${JWT_SECRET}
+      PGRST_APP_SETTINGS_JWT_EXP: 3600
+    depends_on:
+      bootstrap:
+        condition: service_completed_successfully
+
+  storage:
+    image: supabase/storage-api:v1.25.7
+    restart: unless-stopped
+    environment:
+      ANON_KEY: ${ANON_KEY}
+      SERVICE_KEY: ${SERVICE_ROLE_KEY}
+      POSTGREST_URL: http://rest:3000
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+      DATABASE_URL: postgres://supabase_storage_admin:${DB_SERVICE_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT:-5432}/${POSTGRES_DB:-postgres}
+      FILE_SIZE_LIMIT: 52428800
+      STORAGE_BACKEND: file
+      FILE_STORAGE_BACKEND_PATH: /var/lib/storage
+      TENANT_ID: stub
+      REGION: stub
+      GLOBAL_S3_BUCKET: stub
+      ENABLE_IMAGE_TRANSFORMATION: "false"
+    volumes:
+      - storage-data:/var/lib/storage
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:5000/status"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    depends_on:
+      bootstrap:
+        condition: service_completed_successfully
+      rest:
+        condition: service_started
+
+  # API gateway: the single Supabase URL the browser and server talk to.
+  kong:
+    image: kong:2.8.1
+    restart: unless-stopped
+    ports:
+      - "${KONG_PORT:-8000}:8000"
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /home/kong/kong.yml
+      KONG_DNS_ORDER: LAST,A,CNAME
+      KONG_PLUGINS: request-transformer,cors,key-auth,acl
+      KONG_NGINX_PROXY_PROXY_BUFFER_SIZE: 160k
+      KONG_NGINX_PROXY_PROXY_BUFFERS: 64 160k
+      SUPABASE_ANON_KEY: ${ANON_KEY}
+      SUPABASE_SERVICE_KEY: ${SERVICE_ROLE_KEY}
+    # Substitute the API keys into the declarative config, then start Kong.
+    entrypoint: bash -c 'eval "echo \"$$(cat ~/temp.yml)\"" > ~/kong.yml && /docker-entrypoint.sh kong docker-start'
+    volumes:
+      - ./docker/kong/kong.yml:/home/kong/temp.yml:ro
+    depends_on:
+      auth:
+        condition: service_healthy
+      rest:
+        condition: service_started
+
+  meta:
+    image: supabase/postgres-meta:v0.91.0
+    restart: unless-stopped
+    environment:
+      PG_META_PORT: 8080
+      PG_META_DB_HOST: ${POSTGRES_HOST}
+      PG_META_DB_PORT: ${POSTGRES_PORT:-5432}
+      PG_META_DB_NAME: ${POSTGRES_DB:-postgres}
+      PG_META_DB_USER: ${POSTGRES_USER:-postgres}
+      PG_META_DB_PASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      bootstrap:
+        condition: service_completed_successfully
+
+  # Database dashboard: http://localhost:54323
+  studio:
+    image: supabase/studio:2025.06.30-sha-6f5982d
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${STUDIO_PORT:-54323}:3000"
+    environment:
+      HOSTNAME: 0.0.0.0
+      STUDIO_PG_META_URL: http://meta:8080
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      DEFAULT_ORGANIZATION_NAME: C8 Tech Summit
+      DEFAULT_PROJECT_NAME: Local
+      SUPABASE_URL: http://kong:8000
+      SUPABASE_PUBLIC_URL: ${API_EXTERNAL_URL}
+      SUPABASE_ANON_KEY: ${ANON_KEY}
+      SUPABASE_SERVICE_KEY: ${SERVICE_ROLE_KEY}
+      AUTH_JWT_SECRET: ${JWT_SECRET}
+      NEXT_PUBLIC_ENABLE_LOGS: "false"
+    depends_on:
+      meta:
+        condition: service_started
+
+  # Catches every email (registration confirmations, magic links): http://localhost:54324
+  mailpit:
+    image: axllent/mailpit:v1.27
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${MAILPIT_PORT:-54324}:8025"
+      - "127.0.0.1:${SMTP_PORT:-1025}:1025"
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
+volumes:
+  db-data:
+  storage-data:
