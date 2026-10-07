@@ -51,3 +51,12 @@
 - [x] Team: invite, change roles, remove access
 - [ ] Create the first real admin account (`npm run admin:create`)
 
+## Phase 7 — SEO, accessibility, performance, deployment
+
+- [x] Canonical/Open Graph/Twitter tags, share image, Event + BlogPosting JSON-LD, sitemap, robots
+- [x] axe-core: 0 WCAG 2.1 AA violations on public pages; skip link; accessible teal for text
+- [x] Self-hosted fonts, WebP images, lazy registration form, gzip/brotli, cache headers
+- [x] Lighthouse (mobile, co-located DB): performance 81–94, accessibility/best practices/SEO 100
+- [x] Coolify compose: generated secrets, baked-in DB tools, /healthz, /media, bootstrap admin
+- [ ] Deploy on Coolify next to the database; point the domain; set BOOTSTRAP_ADMIN_EMAIL
+
