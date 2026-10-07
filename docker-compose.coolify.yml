@@ -36,6 +36,10 @@ services:
       - SUPABASE_URL=http://gateway:8000
       # The app signs its anon/service-role API keys from this secret.
       - JWT_SECRET=${SERVICE_PASSWORD_JWT}
+      # Blank on purpose: pre-made keys (e.g. pasted from a local .env) would be
+      # signed with a different secret and rejected (JWSInvalidSignature).
+      - SUPABASE_SERVICE_ROLE_KEY=
+      - SUPABASE_PUBLISHABLE_KEY=
       - RESEND_API_KEY=${RESEND_API_KEY:?Set RESEND_API_KEY in Coolify}
       - EMAIL_FROM=${EMAIL_FROM:-C8teamsummit <support@betpreneur.ng>}
       - EMAIL_REPLY_TO=${EMAIL_REPLY_TO:-C8techsummit@gmail.com}
