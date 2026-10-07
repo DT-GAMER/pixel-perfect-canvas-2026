@@ -194,7 +194,8 @@ function SpeakerDialog({
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<SpeakerForm>({
-    resolver: zodResolver(speakerFormSchema) as Resolver<SpeakerForm>,
+    // raw: submit the form values as typed; the server validates and transforms them.
+    resolver: zodResolver(speakerFormSchema, undefined, { raw: true }) as Resolver<SpeakerForm>,
     defaultValues: {
       ...(speaker ? { id: speaker.id } : {}),
       name: speaker?.name ?? "",

@@ -16,7 +16,6 @@ import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as SpeakersRouteImport } from './routes/speakers'
 import { Route as SponsorsRouteImport } from './routes/sponsors'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
-import { Route as AdminBlogRouteImport } from './routes/admin.blog'
 import { Route as AdminFaqsRouteImport } from './routes/admin.faqs'
 import { Route as AdminRegistrationsRouteImport } from './routes/admin.registrations'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
@@ -28,6 +27,8 @@ import { Route as AdminRegistrationsDotcsvRouteImport } from './routes/admin_.re
 import { Route as AuthConfirmRouteImport } from './routes/auth.confirm'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as AdminBlogIndexRouteImport } from './routes/admin.blog.index'
+import { Route as AdminBlogIdRouteImport } from './routes/admin.blog.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -62,11 +63,6 @@ const SponsorsRoute = SponsorsRouteImport.update({
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminBlogRoute = AdminBlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminFaqsRoute = AdminFaqsRouteImport.update({
@@ -125,6 +121,16 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminBlogIndexRoute = AdminBlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminBlogIdRoute = AdminBlogIdRouteImport.update({
+  id: '/blog/$id',
+  path: '/blog/$id',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -133,7 +139,6 @@ export interface FileRoutesByFullPath {
   '/rss.xml': typeof RssDotxmlRoute
   '/speakers': typeof SpeakersRoute
   '/sponsors': typeof SponsorsRoute
-  '/admin/blog': typeof AdminBlogRoute
   '/admin/faqs': typeof AdminFaqsRoute
   '/admin/registrations': typeof AdminRegistrationsRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -146,6 +151,8 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
+  '/admin/blog/$id': typeof AdminBlogIdRoute
+  '/admin/blog/': typeof AdminBlogIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -153,7 +160,6 @@ export interface FileRoutesByTo {
   '/rss.xml': typeof RssDotxmlRoute
   '/speakers': typeof SpeakersRoute
   '/sponsors': typeof SponsorsRoute
-  '/admin/blog': typeof AdminBlogRoute
   '/admin/faqs': typeof AdminFaqsRoute
   '/admin/registrations': typeof AdminRegistrationsRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -166,6 +172,8 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
+  '/admin/blog/$id': typeof AdminBlogIdRoute
+  '/admin/blog': typeof AdminBlogIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -175,7 +183,6 @@ export interface FileRoutesById {
   '/rss.xml': typeof RssDotxmlRoute
   '/speakers': typeof SpeakersRoute
   '/sponsors': typeof SponsorsRoute
-  '/admin/blog': typeof AdminBlogRoute
   '/admin/faqs': typeof AdminFaqsRoute
   '/admin/registrations': typeof AdminRegistrationsRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -188,6 +195,8 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
+  '/admin/blog/$id': typeof AdminBlogIdRoute
+  '/admin/blog/': typeof AdminBlogIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -198,7 +207,6 @@ export interface FileRouteTypes {
     | '/rss.xml'
     | '/speakers'
     | '/sponsors'
-    | '/admin/blog'
     | '/admin/faqs'
     | '/admin/registrations'
     | '/admin/settings'
@@ -211,6 +219,8 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/admin/'
     | '/blog/'
+    | '/admin/blog/$id'
+    | '/admin/blog/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -218,7 +228,6 @@ export interface FileRouteTypes {
     | '/rss.xml'
     | '/speakers'
     | '/sponsors'
-    | '/admin/blog'
     | '/admin/faqs'
     | '/admin/registrations'
     | '/admin/settings'
@@ -231,6 +240,8 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/admin'
     | '/blog'
+    | '/admin/blog/$id'
+    | '/admin/blog'
   id:
     | '__root__'
     | '/'
@@ -239,7 +250,6 @@ export interface FileRouteTypes {
     | '/rss.xml'
     | '/speakers'
     | '/sponsors'
-    | '/admin/blog'
     | '/admin/faqs'
     | '/admin/registrations'
     | '/admin/settings'
@@ -252,6 +262,8 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/admin/'
     | '/blog/'
+    | '/admin/blog/$id'
+    | '/admin/blog/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -317,13 +329,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/blog': {
-      id: '/admin/blog'
-      path: '/blog'
-      fullPath: '/admin/blog'
-      preLoaderRoute: typeof AdminBlogRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/faqs': {
@@ -403,11 +408,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/blog/': {
+      id: '/admin/blog/'
+      path: '/blog'
+      fullPath: '/admin/blog/'
+      preLoaderRoute: typeof AdminBlogIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/blog/$id': {
+      id: '/admin/blog/$id'
+      path: '/blog/$id'
+      fullPath: '/admin/blog/$id'
+      preLoaderRoute: typeof AdminBlogIdRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
-  AdminBlogRoute: typeof AdminBlogRoute
   AdminFaqsRoute: typeof AdminFaqsRoute
   AdminRegistrationsRoute: typeof AdminRegistrationsRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
@@ -415,10 +433,11 @@ interface AdminRouteChildren {
   AdminSponsorsRoute: typeof AdminSponsorsRoute
   AdminTeamRoute: typeof AdminTeamRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminBlogIdRoute: typeof AdminBlogIdRoute
+  AdminBlogIndexRoute: typeof AdminBlogIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
-  AdminBlogRoute: AdminBlogRoute,
   AdminFaqsRoute: AdminFaqsRoute,
   AdminRegistrationsRoute: AdminRegistrationsRoute,
   AdminSettingsRoute: AdminSettingsRoute,
@@ -426,6 +445,8 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminSponsorsRoute: AdminSponsorsRoute,
   AdminTeamRoute: AdminTeamRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminBlogIdRoute: AdminBlogIdRoute,
+  AdminBlogIndexRoute: AdminBlogIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)

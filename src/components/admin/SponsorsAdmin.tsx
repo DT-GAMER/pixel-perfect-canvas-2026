@@ -243,7 +243,8 @@ function SponsorDialog({
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<SponsorForm>({
-    resolver: zodResolver(sponsorFormSchema) as Resolver<SponsorForm>,
+    // raw: submit the form values as typed; the server validates and transforms them.
+    resolver: zodResolver(sponsorFormSchema, undefined, { raw: true }) as Resolver<SponsorForm>,
     defaultValues: {
       ...(sponsor ? { id: sponsor.id } : {}),
       name: sponsor?.name ?? "",
