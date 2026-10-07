@@ -54,3 +54,16 @@ GRANT USAGE ON SCHEMA auth, storage TO anon, authenticated, service_role;
 
 -- App tables live in public; migrations grant table access explicitly.
 GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role;
+
+-- Storage acts as the request's role (e.g. service_role) on its own tables;
+-- row-level security then decides what each role may touch. Grant existing
+-- objects, and default privileges for those its migrations create later.
+GRANT ALL ON ALL TABLES IN SCHEMA storage TO anon, authenticated, service_role;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA storage TO anon, authenticated, service_role;
+GRANT ALL ON ALL FUNCTIONS IN SCHEMA storage TO anon, authenticated, service_role;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_storage_admin IN SCHEMA storage
+  GRANT ALL ON TABLES TO anon, authenticated, service_role;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_storage_admin IN SCHEMA storage
+  GRANT ALL ON SEQUENCES TO anon, authenticated, service_role;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_storage_admin IN SCHEMA storage
+  GRANT ALL ON FUNCTIONS TO anon, authenticated, service_role;

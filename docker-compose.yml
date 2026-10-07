@@ -31,6 +31,8 @@ services:
       SITE_URL: ${SITE_URL}
       # Server-side calls go straight to the gateway on the compose network.
       SUPABASE_URL: http://kong:8000
+      # Browser-facing Supabase URL, used for public links to uploaded files.
+      SUPABASE_PUBLIC_URL: ${API_EXTERNAL_URL}
       SUPABASE_PUBLISHABLE_KEY: ${ANON_KEY}
       SUPABASE_SERVICE_ROLE_KEY: ${SERVICE_ROLE_KEY}
       # Verifies session tokens locally (no Auth round trip per request).
