@@ -1,7 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageHeader } from "@/components/admin/AdminShell";
+import { SpeakersAdmin } from "@/components/admin/SpeakersAdmin";
+import { adminOnly } from "@/lib/admin/guards";
+import { speakersDashboard } from "@/lib/admin/speakers.functions";
 
-// Placeholder until this module is built.
 export const Route = createFileRoute("/admin/speakers")({
-  component: () => <PageHeader title="Coming next" description="This section is being built." />,
+  beforeLoad: adminOnly,
+  loader: () => speakersDashboard(),
+  component: () => <SpeakersAdmin speakers={Route.useLoaderData()} />,
 });
