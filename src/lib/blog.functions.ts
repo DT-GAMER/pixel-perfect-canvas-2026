@@ -87,20 +87,26 @@ export const listPosts = createServerFn({ method: "GET" })
     const supabaseAdmin = await adminClient();
     const page = data.page ?? 1;
 
-    const { data: categories, error: categoryError } = await supabaseAdmin
-      .from("categories")
-      .select("id, slug, name")
-      .order("display_order");
-    if (categoryError) throw new Error(categoryError.message);
-
-    const active = categories.find((category) => category.slug === data.category) ?? null;
-    let query = liveQuery(supabaseAdmin, SUMMARY_COLUMNS)
+    // Categories and posts load in parallel: the category filter matches on the
+    // joined category's slug (inner join), so no id lookup is needed first.
+    const filtered = !!data.category;
+    let query = liveQuery(
+      supabaseAdmin,
+      filtered ? SUMMARY_COLUMNS.replace("categories(", "categories!inner(") : SUMMARY_COLUMNS,
+    )
       .order("published_at", { ascending: false })
       .range((page - 1) * POSTS_PER_PAGE, page * POSTS_PER_PAGE - 1);
-    if (active) query = query.eq("category_id", active.id);
+    if (filtered) query = query.eq("category.slug", data.category!);
 
-    const { data: rows, count, error } = await query;
+    const [categoryResult, postResult] = await Promise.all([
+      supabaseAdmin.from("categories").select("slug, name").order("display_order"),
+      query,
+    ]);
+    if (categoryResult.error) throw new Error(categoryResult.error.message);
+    const { data: rows, count, error } = postResult;
     if (error) throw new Error(error.message);
+    const categories = categoryResult.data;
+    const active = categories.find((category) => category.slug === data.category) ?? null;
 
     return {
       posts: (rows as unknown as SummaryRow[]).map(toSummary),

@@ -18,7 +18,6 @@ import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { CountdownPill } from "@/components/site/CountdownPill";
 import { RegisterModal } from "@/components/site/RegisterModal";
-import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -95,12 +94,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         { name: "twitter:card", content: "summary_large_image" },
       ],
       links: [
-        { rel: "preconnect", href: "https://fonts.googleapis.com" },
-        { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-        {
-          rel: "stylesheet",
-          href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap",
-        },
         { rel: "stylesheet", href: appCss },
         { rel: "icon", href: "/favicon.png", type: "image/png" },
       ],
@@ -139,7 +132,6 @@ function RootComponent() {
     return (
       <QueryClientProvider client={queryClient}>
         <Outlet />
-        <Toaster richColors position="top-right" />
       </QueryClientProvider>
     );
   }

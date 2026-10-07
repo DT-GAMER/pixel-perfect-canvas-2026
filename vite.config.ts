@@ -31,7 +31,16 @@ export default defineConfig(({ mode }) => {
         },
       }),
       // Builds a standalone Node server into .output/ (run with `node .output/server/index.mjs`).
-      nitro({ preset: "node-server" }),
+      nitro({
+        preset: "node-server",
+        // Pre-compress static files (.br/.gz) so they're served compressed.
+        compressPublicAssets: true,
+        routeRules: {
+          "/images/**": { headers: { "cache-control": "public, max-age=604800, stale-while-revalidate=86400" } },
+          "/og-image.png": { headers: { "cache-control": "public, max-age=86400" } },
+          "/favicon.png": { headers: { "cache-control": "public, max-age=604800" } },
+        },
+      }),
       viteReact(),
     ],
   };

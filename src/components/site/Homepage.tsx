@@ -11,11 +11,11 @@ import { SpeakerCard } from "./SpeakerCard";
 import { SponsorsPreview } from "./SponsorsPreview";
 import { useCountdown } from "./CountdownPill";
 import { Arcs } from "./Logo";
-import aiHealthImage from "@/assets/track-ai-health.jpg";
-import innovationImage from "@/assets/track-innovation.jpg";
-import entrepreneurshipImage from "@/assets/track-entrepreneurship.jpg";
-import communityImage from "@/assets/track-community.jpg";
-import heroImage from "@/assets/c8-summit-hero.jpeg";
+import aiHealthImage from "@/assets/track-ai-health.webp";
+import innovationImage from "@/assets/track-innovation.webp";
+import entrepreneurshipImage from "@/assets/track-entrepreneurship.webp";
+import communityImage from "@/assets/track-community.webp";
+import heroImage from "@/assets/c8-summit-hero.webp";
 
 const tracks = [
   {

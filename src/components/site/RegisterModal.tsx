@@ -1,5 +1,5 @@
 import { CheckCircle2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,7 +9,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { EVENT } from "@/lib/event";
-import { RegistrationForm } from "./RegistrationForm";
+// Loaded on first open, so visitors who never register don't download the form.
+const RegistrationForm = lazy(() =>
+  import("./RegistrationForm").then((module) => ({ default: module.RegistrationForm })),
+);
 
 export function RegisterModal() {
   const [open, setOpen] = useState(false);
@@ -91,12 +94,14 @@ export function RegisterModal() {
               </div>
             </div>
 
-            <RegistrationForm
-              idPrefix="registration"
-              autoFocus
-              className="p-7 sm:p-10"
-              onResult={setResult}
-            />
+            <Suspense fallback={<div className="min-h-[480px] p-7 sm:p-10" aria-busy="true" />}>
+              <RegistrationForm
+                idPrefix="registration"
+                autoFocus
+                className="p-7 sm:p-10"
+                onResult={setResult}
+              />
+            </Suspense>
           </div>
         )}
       </DialogContent>

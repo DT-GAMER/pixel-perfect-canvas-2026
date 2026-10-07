@@ -8,20 +8,37 @@
 import { writeFileSync } from "node:fs";
 
 const categories = [
-  { slug: "ai-and-jobs", name: "AI & Jobs", description: "How AI is changing work, careers, and skills in Nigeria." },
-  { slug: "privacy", name: "Privacy", description: "Personal data, rights, and trust in an AI-driven economy." },
-  { slug: "financial-security", name: "Financial Security", description: "Fintech, fraud, and keeping money safe as AI spreads." },
-  { slug: "community", name: "Community", description: "News and stories from the C8 Tech Summit community." },
+  {
+    slug: "ai-and-jobs",
+    name: "AI & Jobs",
+    description: "How AI is changing work, careers, and skills in Nigeria.",
+  },
+  {
+    slug: "privacy",
+    name: "Privacy",
+    description: "Personal data, rights, and trust in an AI-driven economy.",
+  },
+  {
+    slug: "financial-security",
+    name: "Financial Security",
+    description: "Fintech, fraud, and keeping money safe as AI spreads.",
+  },
+  {
+    slug: "community",
+    name: "Community",
+    description: "News and stories from the C8 Tech Summit community.",
+  },
 ];
 
 const posts = [
   {
     slug: "will-ai-take-nigerian-jobs-or-create-new-ones",
     title: "Will AI take Nigerian jobs, or create new ones?",
-    excerpt: "The honest answer is both. What matters is which tasks change first, who gets to adapt, and what we do in the next few years.",
+    excerpt:
+      "The honest answer is both. What matters is which tasks change first, who gets to adapt, and what we do in the next few years.",
     category: "ai-and-jobs",
     tags: ["AI", "jobs", "skills"],
-    cover: "/blog/ai-jobs.jpg",
+    cover: "/images/blog/ai-jobs.webp",
     coverAlt: "Young professionals collaborating around laptops at a workshop table",
     publishedAt: "2026-09-16T09:00:00+01:00",
     body: `
@@ -55,10 +72,11 @@ At C8 Tech Summit 2026 we will put these questions to builders, employers, and e
   {
     slug: "what-your-data-is-worth-in-an-ai-economy",
     title: "What your data is worth in an AI economy",
-    excerpt: "AI runs on personal data. Here is what that means for Nigerians, the rights you already have, and what builders should get right.",
+    excerpt:
+      "AI runs on personal data. Here is what that means for Nigerians, the rights you already have, and what builders should get right.",
     category: "privacy",
     tags: ["privacy", "data protection", "NDPA"],
-    cover: "/blog/privacy.jpg",
+    cover: "/images/blog/privacy.webp",
     coverAlt: "Professionals reviewing information on tablets in a bright office",
     publishedAt: "2026-09-23T09:00:00+01:00",
     body: `
@@ -93,10 +111,11 @@ Our 2026 summit will bring builders, privacy professionals, and everyday users t
   {
     slug: "ai-powered-fraud-and-how-to-stay-a-step-ahead",
     title: "AI-powered fraud and how to stay a step ahead",
-    excerpt: "Scammers are using AI too: cloned voices, convincing messages, fake documents. Here is how individuals and fintech teams can respond.",
+    excerpt:
+      "Scammers are using AI too: cloned voices, convincing messages, fake documents. Here is how individuals and fintech teams can respond.",
     category: "financial-security",
     tags: ["fraud", "fintech", "security"],
-    cover: "/blog/fraud.jpg",
+    cover: "/images/blog/fraud.webp",
     coverAlt: "A team discussing data on a large digital screen in a modern office",
     publishedAt: "2026-09-30T09:00:00+01:00",
     body: `
@@ -126,10 +145,11 @@ At C8 Tech Summit 2026 we will hear from people building payments and security p
   {
     slug: "why-c8-is-giving-emerging-voices-the-stage",
     title: "Why C8 is giving emerging voices the stage",
-    excerpt: "Most tech events spotlight people who have already made it. We think great ideas also come from people who are just getting started.",
+    excerpt:
+      "Most tech events spotlight people who have already made it. We think great ideas also come from people who are just getting started.",
     category: "community",
     tags: ["community", "C8 Tech Summit"],
-    cover: "/blog/community.jpg",
+    cover: "/images/blog/community.webp",
     coverAlt: "Attendees networking in a lively event space",
     publishedAt: "2026-10-03T09:00:00+01:00",
     free: true,
@@ -160,10 +180,11 @@ The summit is live online on 15 October 2026 at 4:00 PM WAT. Register on this si
   {
     slug: "five-ai-skills-every-nigerian-professional-can-learn-this-year",
     title: "Five AI skills every Nigerian professional can learn this year",
-    excerpt: "You don't need to become a machine learning engineer. These practical skills will make you more effective in almost any role.",
+    excerpt:
+      "You don't need to become a machine learning engineer. These practical skills will make you more effective in almost any role.",
     category: "ai-and-jobs",
     tags: ["skills", "careers", "AI"],
-    cover: "/blog/skills.jpg",
+    cover: "/images/blog/skills.webp",
     coverAlt: "Colleagues at a workshop discussing ideas over laptops and notes",
     publishedAt: "2026-10-06T09:00:00+01:00",
     body: `
@@ -197,10 +218,11 @@ We will be talking about skills, careers, and the future of work at C8 Tech Summ
   {
     slug: "c8-tech-summit-2026-what-we-learned",
     title: "C8 Tech Summit 2026: what we learned",
-    excerpt: "Highlights from our conversation on Nigeria's AI revolution: jobs, privacy, and financial security.",
+    excerpt:
+      "Highlights from our conversation on Nigeria's AI revolution: jobs, privacy, and financial security.",
     category: "community",
     tags: ["C8 Tech Summit", "recap"],
-    cover: "/blog/community.jpg",
+    cover: "/images/blog/community.webp",
     coverAlt: "Attendees networking in a lively event space",
     status: "scheduled",
     publishedAt: "2026-10-20T09:00:00+01:00",
@@ -222,7 +244,7 @@ const speakers = [
     role: "AI Research Director",
     organization: "Placeholder Lab",
     track: "privacy",
-    photo: "/speakers/amara.jpg",
+    photo: "/images/speakers/amara.webp",
     bio: "Amara researches how AI systems are built and deployed responsibly, with a focus on data protection in African markets.",
     linkedin: "https://www.linkedin.com/",
     featured: true,
@@ -233,7 +255,7 @@ const speakers = [
     role: "Founder & CEO",
     organization: "Placeholder Fintech",
     track: "financial-security",
-    photo: "/speakers/tunde.jpg",
+    photo: "/images/speakers/tunde.webp",
     bio: "Tunde builds payment infrastructure for Nigerian businesses and thinks a lot about fraud, trust, and financial inclusion.",
     x: "https://x.com/",
     featured: true,
@@ -244,7 +266,7 @@ const speakers = [
     role: "Product Lead",
     organization: "Placeholder Studio",
     track: "ai-and-jobs",
-    photo: "/speakers/zainab.jpg",
+    photo: "/images/speakers/zainab.webp",
     bio: "Zainab helps early-stage teams turn AI ideas into products people use, and mentors emerging builders breaking into tech.",
     linkedin: "https://www.linkedin.com/",
     featured: true,
@@ -269,7 +291,12 @@ function inline(text) {
     if (match.index > last) nodes.push({ type: "text", text: text.slice(last, match.index) });
     if (match[1]) nodes.push({ type: "text", text: match[1], marks: [{ type: "bold" }] });
     else if (match[2]) nodes.push({ type: "text", text: match[2], marks: [{ type: "italic" }] });
-    else nodes.push({ type: "text", text: match[3], marks: [{ type: "link", attrs: { href: match[4] } }] });
+    else
+      nodes.push({
+        type: "text",
+        text: match[3],
+        marks: [{ type: "link", attrs: { href: match[4] } }],
+      });
     last = match.index + match[0].length;
   }
   if (last < text.length) nodes.push({ type: "text", text: text.slice(last) });
@@ -286,10 +313,18 @@ function toDoc(markdown) {
     } else if (lines.every((line) => line.startsWith("- "))) {
       content.push({
         type: "bulletList",
-        content: lines.map((line) => ({ type: "listItem", content: [{ type: "paragraph", content: inline(line.slice(2)) }] })),
+        content: lines.map((line) => ({
+          type: "listItem",
+          content: [{ type: "paragraph", content: inline(line.slice(2)) }],
+        })),
       });
     } else if (lines[0].startsWith("> ")) {
-      content.push({ type: "blockquote", content: [{ type: "paragraph", content: inline(lines.map((l) => l.replace(/^> ?/, "")).join(" ")) }] });
+      content.push({
+        type: "blockquote",
+        content: [
+          { type: "paragraph", content: inline(lines.map((l) => l.replace(/^> ?/, "")).join(" ")) },
+        ],
+      });
     } else {
       content.push({ type: "paragraph", content: inline(lines.join(" ")) });
     }
@@ -310,7 +345,9 @@ const out = [
   "-- Sample content so the site looks complete. Safe to re-run.",
   "",
   "INSERT INTO public.categories (slug, name, description, display_order) VALUES",
-  categories.map((c, i) => `  (${sql(c.slug)}, ${sql(c.name)}, ${sql(c.description)}, ${i})`).join(",\n"),
+  categories
+    .map((c, i) => `  (${sql(c.slug)}, ${sql(c.name)}, ${sql(c.description)}, ${i})`)
+    .join(",\n"),
   "ON CONFLICT (slug) DO NOTHING;",
   "",
 ];

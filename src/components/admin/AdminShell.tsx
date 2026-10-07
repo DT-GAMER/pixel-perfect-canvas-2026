@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { LogoMark } from "@/components/site/Logo";
+import { Toaster } from "@/components/ui/sonner";
 import { EVENT } from "@/lib/event";
 import { signOutReader } from "@/lib/reader.functions";
 import { canAccess, type Staff } from "@/lib/staff";
@@ -110,6 +111,7 @@ export function AdminShell({ staff, children }: { staff: Staff; children: ReactN
       )}
 
       <main className="min-w-0 px-4 py-8 sm:px-8 lg:py-10">{children}</main>
+      <Toaster richColors position="top-right" />
     </div>
   );
 }
