@@ -38,3 +38,16 @@
 - [ ] Real speaker lineup (names, roles, bios, photos, socials, conversation)
 - [ ] Real sponsors (logos, links, tiers, descriptions)
 
+## Phase 6 — Admin dashboard
+
+- [x] Staff roles (admin/editor), magic-link login, guarded dashboard, server-side role checks
+- [x] Overview: totals, sign-ups chart, top professions/countries, latest posts, enquiries
+- [x] Registrations: search, filters, sorting, details, delete, CSV export
+- [x] Sponsors (logo upload, tiers, visibility, drag-and-drop order) and enquiries (status, notes)
+- [x] Speakers: photo upload, socials, track, featured/published, ordering
+- [x] Blog: Tiptap editor, cover upload, gating, scheduling, SEO, preview
+- [x] FAQ: add/edit/reorder/hide; homepage reads from the database
+- [x] Site settings: event details and dates (drive countdown/emails), stats, socials, privacy policy
+- [x] Team: invite, change roles, remove access
+- [ ] Create the first real admin account (`npm run admin:create`)
+

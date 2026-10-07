@@ -1,7 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageHeader } from "@/components/admin/AdminShell";
+import { TeamAdmin } from "@/components/admin/TeamAdmin";
+import { adminOnly } from "@/lib/admin/guards";
+import { teamDashboard } from "@/lib/admin/team.functions";
 
-// Placeholder until this module is built.
 export const Route = createFileRoute("/admin/team")({
-  component: () => <PageHeader title="Coming next" description="This section is being built." />,
+  beforeLoad: adminOnly,
+  loader: () => teamDashboard(),
+  component: TeamRoute,
 });
+
+function TeamRoute() {
+  const { members, meId } = Route.useLoaderData();
+  return <TeamAdmin members={members} meId={meId} />;
+}

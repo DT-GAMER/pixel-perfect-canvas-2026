@@ -135,7 +135,7 @@ export function PostEditor({ data, defaultAuthor }: { data: Data; defaultAuthor:
             <Field label="Title" htmlFor="post-title" error={errors.title?.message}>
               <Input
                 id="post-title"
-                className="h-14 font-display text-2xl font-bold"
+                className="h-14 font-display text-2xl font-bold md:text-2xl"
                 {...title}
                 onChange={(event) => {
                   void title.onChange(event);

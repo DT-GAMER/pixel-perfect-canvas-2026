@@ -49,9 +49,9 @@ export function SponsorsPage({ sponsors, enquiryTier }: Props) {
           </p>
           <h1 className="mt-4 max-w-4xl text-h1">Back the builders shaping Nigeria's AI future.</h1>
           <p className="mt-6 max-w-2xl text-lg text-paper/80">
-            Partner with {EVENT.name} {EVENT.edition}, {EVENT.venue.toLowerCase()} on {EVENT.dateLabel}, and put
-            your brand at the centre of the conversation on AI, jobs, privacy, and financial
-            security.
+            Partner with {EVENT.name} {EVENT.edition}, {EVENT.venue.toLowerCase()} on{" "}
+            {EVENT.dateLabel}, and put your brand at the centre of the conversation on AI, jobs,
+            privacy, and financial security.
           </p>
           <a
             href="#enquire"

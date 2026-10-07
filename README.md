@@ -116,12 +116,24 @@ The template lives in `src/lib/registration-email.server.ts`; event facts (date,
 - **Sponsor enquiries** are validated on the server, rate limited (3 per hour per IP), saved to `sponsor_enquiries` (status `new` / `contacted` / `closed`), emailed to `SPONSOR_ENQUIRY_EMAIL` with reply-to set to the enquirer, and acknowledged to the enquirer.
 - Until the admin dashboard (Phase 6), edit speakers and sponsors in Supabase Studio (http://localhost:54323) or via `scripts/generate-seed.mjs`.
 
+## Admin dashboard
+
+`/admin` is for staff only. Staff sign in with a one-time email link (no passwords).
+
+- **Create the first admin** (stack running): `npm run admin:create -- you@example.com "Your Name"`. After that, admins invite people from **Team**.
+- **Roles:** *admin* manages everything; *editor* can only write and publish blog posts. Every admin server function re-checks the role on the server.
+- **Sections:** Overview (stats, sign-ups chart), Registrations (filters, CSV export), Sponsors (partners + enquiries), Speakers, Blog (Tiptap editor), FAQ, Site settings (event details, dates, stats, privacy policy), Team.
+- Uploaded images go to the public `media` storage bucket (PNG/JPEG/WebP/GIF/SVG, 5 MB max, alt text required).
+- Settings changes appear on the site within 30 seconds (instantly on the server that saved them).
+
 ## Project layout
 
 ```
 src/routes/            File-based routes (index composes the homepage; owns metadata)
 src/components/site/   Site components (header, footer, homepage sections, registration form + modal)
 src/components/blog/   Blog listing, article renderer, sign-up wall
+src/components/admin/  Dashboard pages and shared admin fields
+src/lib/admin/         Dashboard server functions (*.functions.ts) and schemas
 src/components/ui/     shadcn/ui primitives
 src/lib/               Shared logic; *.functions.ts are server functions
 src/integrations/      Supabase clients (client.server.ts = service role, server only)
