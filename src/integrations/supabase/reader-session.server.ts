@@ -2,6 +2,7 @@
 //
 // Readers sign in with a magic link; the session lives in httpOnly cookies so
 // SSR knows who is signed in and can decide how much of a gated post to send.
+import { createHmac, timingSafeEqual } from "node:crypto";
 import { createServerClient, type CookieOptionsWithName } from "@supabase/ssr";
 import { getCookies, setCookie } from "@tanstack/react-start/server";
 import type { Database } from "./types";
@@ -48,13 +49,57 @@ export function createReaderClient(onSetCookies?: (cookies: CookieToSet[]) => vo
 
 export type Reader = { id: string; email: string };
 
-/** The signed-in reader for this request, or null. Refreshes the session if needed. */
+type Claims = {
+  sub?: string;
+  email?: string;
+  exp?: number;
+  aud?: string | string[];
+  role?: string;
+};
+
+/**
+ * Verifies a Supabase access token (HS256, signed with JWT_SECRET) locally, so
+ * identifying the caller doesn't cost a round trip to the Auth server.
+ */
+function verifyAccessToken(token: string): Claims | null {
+  const secret = process.env["JWT_SECRET"];
+  if (!secret) return null;
+  const [header, payload, signature] = token.split(".");
+  if (!header || !payload || !signature) return null;
+  try {
+    if (JSON.parse(Buffer.from(header, "base64url").toString()).alg !== "HS256") return null;
+    const expected = createHmac("sha256", secret).update(`${header}.${payload}`).digest();
+    const given = Buffer.from(signature, "base64url");
+    if (given.length !== expected.length || !timingSafeEqual(given, expected)) return null;
+    const claims = JSON.parse(Buffer.from(payload, "base64url").toString()) as Claims;
+    if (!claims.exp || claims.exp * 1000 <= Date.now()) return null;
+    if (claims.role !== "authenticated") return null;
+    return claims;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The signed-in reader for this request, or null. The session comes from the
+ * cookie (refreshed via Auth only when the access token has expired); its
+ * token is then verified locally. Falls back to asking Auth if JWT_SECRET is unset.
+ */
 export async function getReader(): Promise<Reader | null> {
   const hasSession = Object.keys(getCookies()).some((name) =>
     name.startsWith(READER_COOKIE_OPTIONS.name!),
   );
   if (!hasSession) return null;
-  const { data, error } = await createReaderClient().auth.getUser();
+  const supabase = createReaderClient();
+
+  if (process.env["JWT_SECRET"]) {
+    const { data } = await supabase.auth.getSession();
+    const claims = data.session ? verifyAccessToken(data.session.access_token) : null;
+    if (!claims?.sub || !claims.email) return null;
+    return { id: claims.sub, email: claims.email };
+  }
+
+  const { data, error } = await supabase.auth.getUser();
   if (error || !data.user?.email) return null;
   return { id: data.user.id, email: data.user.email };
 }

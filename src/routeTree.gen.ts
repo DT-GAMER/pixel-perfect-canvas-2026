@@ -24,6 +24,7 @@ import { Route as AdminSpeakersRouteImport } from './routes/admin.speakers'
 import { Route as AdminSponsorsRouteImport } from './routes/admin.sponsors'
 import { Route as AdminTeamRouteImport } from './routes/admin.team'
 import { Route as AdminLoginRouteImport } from './routes/admin_.login'
+import { Route as AdminRegistrationsDotcsvRouteImport } from './routes/admin_.registrations[.]csv'
 import { Route as AuthConfirmRouteImport } from './routes/auth.confirm'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -103,6 +104,12 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRegistrationsDotcsvRoute =
+  AdminRegistrationsDotcsvRouteImport.update({
+    id: '/admin_/registrations.csv',
+    path: '/admin/registrations.csv',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthConfirmRoute = AuthConfirmRouteImport.update({
   id: '/auth/confirm',
   path: '/auth/confirm',
@@ -134,6 +141,7 @@ export interface FileRoutesByFullPath {
   '/admin/sponsors': typeof AdminSponsorsRoute
   '/admin/team': typeof AdminTeamRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/registrations.csv': typeof AdminRegistrationsDotcsvRoute
   '/auth/confirm': typeof AuthConfirmRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -153,6 +161,7 @@ export interface FileRoutesByTo {
   '/admin/sponsors': typeof AdminSponsorsRoute
   '/admin/team': typeof AdminTeamRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/registrations.csv': typeof AdminRegistrationsDotcsvRoute
   '/auth/confirm': typeof AuthConfirmRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/admin': typeof AdminIndexRoute
@@ -174,6 +183,7 @@ export interface FileRoutesById {
   '/admin/sponsors': typeof AdminSponsorsRoute
   '/admin/team': typeof AdminTeamRoute
   '/admin_/login': typeof AdminLoginRoute
+  '/admin_/registrations.csv': typeof AdminRegistrationsDotcsvRoute
   '/auth/confirm': typeof AuthConfirmRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -196,6 +206,7 @@ export interface FileRouteTypes {
     | '/admin/sponsors'
     | '/admin/team'
     | '/admin/login'
+    | '/admin/registrations.csv'
     | '/auth/confirm'
     | '/blog/$slug'
     | '/admin/'
@@ -215,6 +226,7 @@ export interface FileRouteTypes {
     | '/admin/sponsors'
     | '/admin/team'
     | '/admin/login'
+    | '/admin/registrations.csv'
     | '/auth/confirm'
     | '/blog/$slug'
     | '/admin'
@@ -235,6 +247,7 @@ export interface FileRouteTypes {
     | '/admin/sponsors'
     | '/admin/team'
     | '/admin_/login'
+    | '/admin_/registrations.csv'
     | '/auth/confirm'
     | '/blog/$slug'
     | '/admin/'
@@ -249,6 +262,7 @@ export interface RootRouteChildren {
   SpeakersRoute: typeof SpeakersRoute
   SponsorsRoute: typeof SponsorsRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminRegistrationsDotcsvRoute: typeof AdminRegistrationsDotcsvRoute
   AuthConfirmRoute: typeof AuthConfirmRoute
   BlogSlugRoute: typeof BlogSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
@@ -361,6 +375,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin_/registrations.csv': {
+      id: '/admin_/registrations.csv'
+      path: '/admin/registrations.csv'
+      fullPath: '/admin/registrations.csv'
+      preLoaderRoute: typeof AdminRegistrationsDotcsvRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth/confirm': {
       id: '/auth/confirm'
       path: '/auth/confirm'
@@ -417,6 +438,7 @@ const rootRouteChildren: RootRouteChildren = {
   SpeakersRoute: SpeakersRoute,
   SponsorsRoute: SponsorsRoute,
   AdminLoginRoute: AdminLoginRoute,
+  AdminRegistrationsDotcsvRoute: AdminRegistrationsDotcsvRoute,
   AuthConfirmRoute: AuthConfirmRoute,
   BlogSlugRoute: BlogSlugRoute,
   BlogIndexRoute: BlogIndexRoute,

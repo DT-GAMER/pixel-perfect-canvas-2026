@@ -1,7 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageHeader } from "@/components/admin/AdminShell";
+import { RegistrationsTable } from "@/components/admin/RegistrationsTable";
+import { adminOnly } from "@/lib/admin/guards";
+import { registrationFiltersSchema } from "@/lib/admin/registrations";
+import { listRegistrations } from "@/lib/admin/registrations.functions";
 
-// Placeholder until this module is built.
 export const Route = createFileRoute("/admin/registrations")({
-  component: () => <PageHeader title="Coming next" description="This section is being built." />,
+  validateSearch: registrationFiltersSchema,
+  beforeLoad: adminOnly,
+  loaderDeps: ({ search }) => search,
+  loader: ({ deps }) => listRegistrations({ data: deps }),
+  component: RegistrationsRoute,
 });
+
+function RegistrationsRoute() {
+  return <RegistrationsTable data={Route.useLoaderData()} filters={Route.useSearch()} />;
+}
