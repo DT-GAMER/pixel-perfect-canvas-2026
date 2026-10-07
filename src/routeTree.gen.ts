@@ -10,10 +10,20 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as SpeakersRouteImport } from './routes/speakers'
 import { Route as SponsorsRouteImport } from './routes/sponsors'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminBlogRouteImport } from './routes/admin.blog'
+import { Route as AdminFaqsRouteImport } from './routes/admin.faqs'
+import { Route as AdminRegistrationsRouteImport } from './routes/admin.registrations'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminSpeakersRouteImport } from './routes/admin.speakers'
+import { Route as AdminSponsorsRouteImport } from './routes/admin.sponsors'
+import { Route as AdminTeamRouteImport } from './routes/admin.team'
+import { Route as AdminLoginRouteImport } from './routes/admin_.login'
 import { Route as AuthConfirmRouteImport } from './routes/auth.confirm'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -21,6 +31,11 @@ import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -43,6 +58,51 @@ const SponsorsRoute = SponsorsRouteImport.update({
   path: '/sponsors',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminBlogRoute = AdminBlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminFaqsRoute = AdminFaqsRouteImport.update({
+  id: '/faqs',
+  path: '/faqs',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminRegistrationsRoute = AdminRegistrationsRouteImport.update({
+  id: '/registrations',
+  path: '/registrations',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSpeakersRoute = AdminSpeakersRouteImport.update({
+  id: '/speakers',
+  path: '/speakers',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSponsorsRoute = AdminSponsorsRouteImport.update({
+  id: '/sponsors',
+  path: '/sponsors',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTeamRoute = AdminTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin_/login',
+  path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthConfirmRoute = AuthConfirmRouteImport.update({
   id: '/auth/confirm',
   path: '/auth/confirm',
@@ -61,12 +121,22 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/speakers': typeof SpeakersRoute
   '/sponsors': typeof SponsorsRoute
+  '/admin/blog': typeof AdminBlogRoute
+  '/admin/faqs': typeof AdminFaqsRoute
+  '/admin/registrations': typeof AdminRegistrationsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/speakers': typeof AdminSpeakersRoute
+  '/admin/sponsors': typeof AdminSponsorsRoute
+  '/admin/team': typeof AdminTeamRoute
+  '/admin/login': typeof AdminLoginRoute
   '/auth/confirm': typeof AuthConfirmRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
 }
 export interface FileRoutesByTo {
@@ -75,31 +145,60 @@ export interface FileRoutesByTo {
   '/rss.xml': typeof RssDotxmlRoute
   '/speakers': typeof SpeakersRoute
   '/sponsors': typeof SponsorsRoute
+  '/admin/blog': typeof AdminBlogRoute
+  '/admin/faqs': typeof AdminFaqsRoute
+  '/admin/registrations': typeof AdminRegistrationsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/speakers': typeof AdminSpeakersRoute
+  '/admin/sponsors': typeof AdminSponsorsRoute
+  '/admin/team': typeof AdminTeamRoute
+  '/admin/login': typeof AdminLoginRoute
   '/auth/confirm': typeof AuthConfirmRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/speakers': typeof SpeakersRoute
   '/sponsors': typeof SponsorsRoute
+  '/admin/blog': typeof AdminBlogRoute
+  '/admin/faqs': typeof AdminFaqsRoute
+  '/admin/registrations': typeof AdminRegistrationsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/speakers': typeof AdminSpeakersRoute
+  '/admin/sponsors': typeof AdminSponsorsRoute
+  '/admin/team': typeof AdminTeamRoute
+  '/admin_/login': typeof AdminLoginRoute
   '/auth/confirm': typeof AuthConfirmRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/privacy'
     | '/rss.xml'
     | '/speakers'
     | '/sponsors'
+    | '/admin/blog'
+    | '/admin/faqs'
+    | '/admin/registrations'
+    | '/admin/settings'
+    | '/admin/speakers'
+    | '/admin/sponsors'
+    | '/admin/team'
+    | '/admin/login'
     | '/auth/confirm'
     | '/blog/$slug'
+    | '/admin/'
     | '/blog/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -108,27 +207,48 @@ export interface FileRouteTypes {
     | '/rss.xml'
     | '/speakers'
     | '/sponsors'
+    | '/admin/blog'
+    | '/admin/faqs'
+    | '/admin/registrations'
+    | '/admin/settings'
+    | '/admin/speakers'
+    | '/admin/sponsors'
+    | '/admin/team'
+    | '/admin/login'
     | '/auth/confirm'
     | '/blog/$slug'
+    | '/admin'
     | '/blog'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/privacy'
     | '/rss.xml'
     | '/speakers'
     | '/sponsors'
+    | '/admin/blog'
+    | '/admin/faqs'
+    | '/admin/registrations'
+    | '/admin/settings'
+    | '/admin/speakers'
+    | '/admin/sponsors'
+    | '/admin/team'
+    | '/admin_/login'
     | '/auth/confirm'
     | '/blog/$slug'
+    | '/admin/'
     | '/blog/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
   PrivacyRoute: typeof PrivacyRoute
   RssDotxmlRoute: typeof RssDotxmlRoute
   SpeakersRoute: typeof SpeakersRoute
   SponsorsRoute: typeof SponsorsRoute
+  AdminLoginRoute: typeof AdminLoginRoute
   AuthConfirmRoute: typeof AuthConfirmRoute
   BlogSlugRoute: typeof BlogSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
@@ -141,6 +261,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -171,6 +298,69 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SponsorsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/blog': {
+      id: '/admin/blog'
+      path: '/blog'
+      fullPath: '/admin/blog'
+      preLoaderRoute: typeof AdminBlogRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/faqs': {
+      id: '/admin/faqs'
+      path: '/faqs'
+      fullPath: '/admin/faqs'
+      preLoaderRoute: typeof AdminFaqsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/registrations': {
+      id: '/admin/registrations'
+      path: '/registrations'
+      fullPath: '/admin/registrations'
+      preLoaderRoute: typeof AdminRegistrationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/speakers': {
+      id: '/admin/speakers'
+      path: '/speakers'
+      fullPath: '/admin/speakers'
+      preLoaderRoute: typeof AdminSpeakersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/sponsors': {
+      id: '/admin/sponsors'
+      path: '/sponsors'
+      fullPath: '/admin/sponsors'
+      preLoaderRoute: typeof AdminSponsorsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/team': {
+      id: '/admin/team'
+      path: '/team'
+      fullPath: '/admin/team'
+      preLoaderRoute: typeof AdminTeamRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin_/login': {
+      id: '/admin_/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth/confirm': {
       id: '/auth/confirm'
       path: '/auth/confirm'
@@ -195,12 +385,38 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminBlogRoute: typeof AdminBlogRoute
+  AdminFaqsRoute: typeof AdminFaqsRoute
+  AdminRegistrationsRoute: typeof AdminRegistrationsRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminSpeakersRoute: typeof AdminSpeakersRoute
+  AdminSponsorsRoute: typeof AdminSponsorsRoute
+  AdminTeamRoute: typeof AdminTeamRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminBlogRoute: AdminBlogRoute,
+  AdminFaqsRoute: AdminFaqsRoute,
+  AdminRegistrationsRoute: AdminRegistrationsRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminSpeakersRoute: AdminSpeakersRoute,
+  AdminSponsorsRoute: AdminSponsorsRoute,
+  AdminTeamRoute: AdminTeamRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
   PrivacyRoute: PrivacyRoute,
   RssDotxmlRoute: RssDotxmlRoute,
   SpeakersRoute: SpeakersRoute,
   SponsorsRoute: SponsorsRoute,
+  AdminLoginRoute: AdminLoginRoute,
   AuthConfirmRoute: AuthConfirmRoute,
   BlogSlugRoute: BlogSlugRoute,
   BlogIndexRoute: BlogIndexRoute,

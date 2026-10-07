@@ -27,7 +27,9 @@ export const Route = createFileRoute("/auth/confirm")({
           ok = !error;
         }
 
-        const destination = new URL(next, url.origin);
+        // Failed dashboard links go back to the dashboard login, not the guarded page.
+        const failedAdmin = !ok && next.startsWith("/admin");
+        const destination = new URL(failedAdmin ? "/admin/login" : next, url.origin);
         if (!ok) destination.searchParams.set("signin", "expired");
         headers.set("location", `${destination.pathname}${destination.search}${destination.hash}`);
         return new Response(null, { status: 303, headers });

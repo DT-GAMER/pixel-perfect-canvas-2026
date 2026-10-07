@@ -31,3 +31,31 @@ export function readerSignInEmail(email: string, link: string): EmailMessage {
 
   return { to: email, subject, html, text };
 }
+
+export function staffSignInEmail(email: string, link: string): EmailMessage {
+  const subject = `Your ${EVENT.name} dashboard sign-in link`;
+  const text = [
+    "Hi,",
+    "",
+    `Use this link to sign in to the ${EVENT.name} admin dashboard:`,
+    link,
+    "",
+    "It works once and expires in 1 hour. If you didn't ask for it, you can ignore this email.",
+    "",
+    textFooter(),
+  ].join("\n");
+
+  const html = emailLayout({
+    subject,
+    preheader: "Your dashboard sign-in link is inside. It expires in 1 hour.",
+    eyebrow: "Admin dashboard",
+    heading: "Sign in to the dashboard.",
+    reason: "You're receiving this because someone asked for a dashboard sign-in link at",
+    body: `
+      ${emailParagraph(`Use the button below to sign in to the ${EVENT.name} admin dashboard.`)}
+      ${emailButton(link, "Sign in to the dashboard")}
+      <p style="margin:20px 0 0;font-size:14px;line-height:1.6;color:#5b6070;">This link works once and expires in 1 hour. If you didn't ask for it, you can ignore this email.</p>`,
+  });
+
+  return { to: email, subject, html, text };
+}
