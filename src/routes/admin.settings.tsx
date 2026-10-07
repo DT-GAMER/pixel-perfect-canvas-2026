@@ -1,7 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageHeader } from "@/components/admin/AdminShell";
+import { SettingsAdmin } from "@/components/admin/SettingsAdmin";
+import { adminOnly } from "@/lib/admin/guards";
+import { settingsEditorData } from "@/lib/admin/settings.functions";
 
-// Placeholder until this module is built.
 export const Route = createFileRoute("/admin/settings")({
-  component: () => <PageHeader title="Coming next" description="This section is being built." />,
+  beforeLoad: adminOnly,
+  loader: () => settingsEditorData(),
+  component: () => <SettingsAdmin data={Route.useLoaderData()} />,
 });

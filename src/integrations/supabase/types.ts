@@ -263,6 +263,63 @@ export type Database = {
         }
         Relationships: []
       }
+      site_settings: {
+        Row: {
+          contact_email: string
+          ends_at: string
+          event_name: string
+          format: string
+          id: boolean
+          instagram_url: string | null
+          linkedin_url: string | null
+          privacy_policy: Json | null
+          starts_at: string
+          stats: Json
+          tagline: string
+          theme: string
+          theme_short: string
+          updated_at: string
+          venue: string
+          x_url: string | null
+        }
+        Insert: {
+          contact_email: string
+          ends_at: string
+          event_name: string
+          format: string
+          id?: boolean
+          instagram_url?: string | null
+          linkedin_url?: string | null
+          privacy_policy?: Json | null
+          starts_at: string
+          stats?: Json
+          tagline: string
+          theme: string
+          theme_short: string
+          updated_at?: string
+          venue: string
+          x_url?: string | null
+        }
+        Update: {
+          contact_email?: string
+          ends_at?: string
+          event_name?: string
+          format?: string
+          id?: boolean
+          instagram_url?: string | null
+          linkedin_url?: string | null
+          privacy_policy?: Json | null
+          starts_at?: string
+          stats?: Json
+          tagline?: string
+          theme?: string
+          theme_short?: string
+          updated_at?: string
+          venue?: string
+          x_url?: string | null
+        }
+        Relationships: []
+      }
       speakers: {
         Row: {
           bio: string | null
@@ -427,9 +484,9 @@ export type Database = {
       }
       consume_registration_attempt: {
         Args: {
+          p_max_attempts?: number
           p_key_hash: string
           p_window_seconds?: number
-          p_max_attempts?: number
         }
         Returns: boolean
       }

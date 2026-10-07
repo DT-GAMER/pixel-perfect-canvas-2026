@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { EVENT } from "@/lib/event";
 import { PrivacyPolicy } from "@/components/site/PrivacyPolicy";
+import { getPrivacyPolicy } from "@/lib/privacy.functions";
 
 export const Route = createFileRoute("/privacy")({
   head: () => ({
@@ -20,5 +21,6 @@ export const Route = createFileRoute("/privacy")({
     ],
     links: [{ rel: "canonical", href: "/privacy" }],
   }),
-  component: PrivacyPolicy,
+  loader: () => getPrivacyPolicy(),
+  component: () => <PrivacyPolicy policy={Route.useLoaderData()} />,
 });

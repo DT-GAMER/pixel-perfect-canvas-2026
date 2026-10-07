@@ -9,7 +9,8 @@ const searchSchema = z.object({
   page: z.coerce.number().int().min(1).max(1000).optional().catch(undefined),
 });
 
-const description = `Explainers and opinion on what AI means for Nigerian jobs, privacy, and financial security, from ${EVENT.name}.`;
+const description = () =>
+  `Explainers and opinion on what AI means for Nigerian jobs, privacy, and financial security, from ${EVENT.name}.`;
 
 export const Route = createFileRoute("/blog/")({
   validateSearch: searchSchema,
@@ -24,9 +25,9 @@ export const Route = createFileRoute("/blog/")({
   head: () => ({
     meta: [
       { title: `Blog — ${EVENT.name}` },
-      { name: "description", content: description },
+      { name: "description", content: description() },
       { property: "og:title", content: `Blog — ${EVENT.name}` },
-      { property: "og:description", content: description },
+      { property: "og:description", content: description() },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

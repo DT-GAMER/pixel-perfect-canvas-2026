@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { EVENT, EVENT_WHEN_WHERE } from "@/lib/event";
+import { EVENT, eventWhenWhere } from "@/lib/event";
 import { Homepage } from "@/components/site/Homepage";
 import { latestPosts } from "@/lib/blog.functions";
 import { featuredSpeakers } from "@/lib/speakers.functions";
@@ -12,10 +12,10 @@ export const Route = createFileRoute("/")({
       { title: `${EVENT.name} — ${EVENT.tagline}` },
       {
         name: "description",
-        content: `${EVENT.name} ${EVENT.edition}: ${EVENT.theme}. ${EVENT_WHEN_WHERE}.`,
+        content: `${EVENT.name} ${EVENT.edition}: ${EVENT.theme}. ${eventWhenWhere()}.`,
       },
       { property: "og:title", content: `${EVENT.name} — ${EVENT.tagline}` },
-      { property: "og:description", content: `${EVENT.theme}. ${EVENT_WHEN_WHERE}.` },
+      { property: "og:description", content: `${EVENT.theme}. ${eventWhenWhere()}.` },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

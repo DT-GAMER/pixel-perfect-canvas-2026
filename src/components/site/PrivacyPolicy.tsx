@@ -1,5 +1,8 @@
 import type { ReactNode } from "react";
+import { ArticleBody } from "@/components/blog/ArticleBody";
 import { EVENT } from "@/lib/event";
+import { formatDate } from "@/lib/format";
+import type { RichDoc } from "@/lib/rich-text";
 
 // Plain-language policy describing what the site actually collects today.
 // Becomes admin-editable in Phase 6; have it reviewed before launch.
@@ -16,7 +19,28 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-export function PrivacyPolicy() {
+type Props = { policy: { content: RichDoc | null; updatedAt: string | null } };
+
+export function PrivacyPolicy({ policy }: Props) {
+  // A policy written in the dashboard replaces the built-in one below.
+  if (policy.content) {
+    return (
+      <article className="bg-paper">
+        <div className="mx-auto max-w-3xl px-5 py-20 md:py-28">
+          {policy.updatedAt && (
+            <p className="font-display text-sm font-bold uppercase text-digital-teal">
+              Last updated {formatDate(policy.updatedAt)}
+            </p>
+          )}
+          <h1 className="mt-4 text-h1 text-deep-blue">Privacy policy</h1>
+          <div className="mt-10">
+            <ArticleBody blocks={policy.content.content ?? []} />
+          </div>
+        </div>
+      </article>
+    );
+  }
+
   const mail = (
     <a href={`mailto:${EVENT.email}`} className="font-semibold text-deep-blue underline">
       {EVENT.email}

@@ -18,6 +18,17 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
   }
 });
 
+// Refresh EVENT from site_settings (cached) before rendering or running server functions.
+const settingsMiddleware = createMiddleware().server(async ({ next }) => {
+  try {
+    const { loadSettings } = await import("./lib/settings.server");
+    await loadSettings();
+  } catch (error) {
+    console.error("Loading site settings failed; using defaults", error);
+  }
+  return next();
+});
+
 // Start installs this automatically when src/start.ts is absent; defining the
 // file opts out, so re-add it explicitly to keep server functions protected
 // from cross-site requests.
@@ -27,5 +38,5 @@ const csrfMiddleware = createCsrfMiddleware({
 
 export const startInstance = createStart(() => ({
   functionMiddleware: [attachSupabaseAuth],
-  requestMiddleware: [errorMiddleware, csrfMiddleware],
+  requestMiddleware: [errorMiddleware, csrfMiddleware, settingsMiddleware],
 }));
