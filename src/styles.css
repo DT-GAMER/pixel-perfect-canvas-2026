@@ -109,7 +109,9 @@
 @keyframes arc-spin { to { transform: rotate(360deg); } }
 
 @utility animate-enter-up { animation: enter-up 0.8s ease-out both; }
-@keyframes enter-up { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+/* Slide only (no fade): the hero headline is the largest paint, and an
+   invisible start would delay it. */
+@keyframes enter-up { from { transform: translateY(24px); } to { transform: translateY(0); } }
 
 .arc-draw { stroke-dasharray: 900; animation: draw-arc 1.8s ease-out both; }
 .arc-delay { animation-delay: 0.25s; }
@@ -120,7 +122,9 @@
 .sponsor-marquee { animation: ticker 32s linear infinite; }
 @keyframes ticker { to { transform: translateX(-50%); } }
 
-.reveal { animation: reveal-up linear both; animation-timeline: view(); animation-range: entry 5% cover 28%; }
+/* Finish as soon as the element is fully on screen, so anything visible on
+   load (or resting on screen) is never left half-faded. */
+.reveal { animation: reveal-up linear both; animation-timeline: view(); animation-range: entry 0% entry 100%; }
 @keyframes reveal-up { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 
 @media (prefers-reduced-motion: reduce) {

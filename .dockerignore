@@ -5,6 +5,4 @@ dist
 .env
 .env.*
 !.env.example
-docker
-supabase
 *.log

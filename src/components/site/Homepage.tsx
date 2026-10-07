@@ -16,6 +16,7 @@ import innovationImage from "@/assets/track-innovation.webp";
 import entrepreneurshipImage from "@/assets/track-entrepreneurship.webp";
 import communityImage from "@/assets/track-community.webp";
 import heroImage from "@/assets/c8-summit-hero.webp";
+import heroImageSmall from "@/assets/c8-summit-hero-720.webp";
 
 const tracks = [
   {
@@ -133,6 +134,8 @@ export function Homepage({ latestPosts, speakers, sponsors, faqs }: Props) {
       <section className="relative flex min-h-[calc(100svh-9.5rem)] items-end overflow-hidden bg-deep-blue text-paper">
         <img
           src={heroImage}
+          srcSet={`${heroImageSmall} 720w, ${heroImage} 1080w`}
+          sizes="100vw"
           alt="A technology summit audience gathered around an illuminated stage"
           fetchPriority="high"
           width={1080}

@@ -19,11 +19,7 @@ x-needs-bootstrap: &needs-bootstrap
 
 services:
   app:
-    build:
-      context: .
-      args:
-        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL}
-        VITE_SUPABASE_PUBLISHABLE_KEY: ${VITE_SUPABASE_PUBLISHABLE_KEY}
+    build: .
     restart: unless-stopped
     ports:
       - "${APP_PORT:-3000}:3000"
