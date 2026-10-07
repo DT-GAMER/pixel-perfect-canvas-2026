@@ -143,7 +143,7 @@ docker/                Local Supabase config (Postgres init, Kong gateway, migra
 
 ## Deployment (Coolify)
 
-Production uses `docker-compose.coolify.yml`: the app, Supabase Auth/REST/Storage and an internal Kong gateway, plus one-shot `bootstrap` and `migrate` containers. Only the app is public; uploaded images are served by the app at `/media/*`.
+Production uses `docker-compose.coolify.yml`: the app, Supabase Auth/REST/Storage and an internal nginx gateway, plus one-shot `bootstrap` and `migrate` containers. Only the app is public; uploaded images are served by the app at `/media/*`.
 
 1. **New resource** → your Git repository → build pack **Docker Compose**.
 2. **Docker Compose Location:** `/docker-compose.coolify.yml`.
@@ -152,7 +152,7 @@ Production uses `docker-compose.coolify.yml`: the app, Supabase Auth/REST/Storag
    - `POSTGRES_PASSWORD`: superuser password of the PostgreSQL server
    - `RESEND_API_KEY`: Resend API key
 
-   Coolify generates the JWT secret, API keys and service password automatically (`SERVICE_PASSWORD_JWT`, `SERVICE_SUPABASEANON_KEY`, `SERVICE_SUPABASESERVICE_KEY`, `SERVICE_PASSWORD_DBSERVICE`). Optional overrides: `POSTGRES_HOST` (default `62.238.60.119`), `POSTGRES_PORT` (`6000`), `SITE_URL`, `EMAIL_FROM`, `EMAIL_REPLY_TO`, `SPONSOR_ENQUIRY_EMAIL`.
+   Coolify generates the JWT secret and service password automatically (`SERVICE_PASSWORD_JWT`, `SERVICE_PASSWORD_DBSERVICE`); the app signs its Supabase API keys from the JWT secret. Optional overrides: `POSTGRES_HOST` (default `62.238.60.119`), `POSTGRES_PORT` (`6000`), `SITE_URL`, `EMAIL_FROM`, `EMAIL_REPLY_TO`, `SPONSOR_ENQUIRY_EMAIL`.
 5. **First admin:** set `BOOTSTRAP_ADMIN_EMAIL` to your email, deploy, then sign in at `/admin/login`. It only works while there are no staff; clear it afterwards and invite others from **Team**.
 6. **Deploy.** The `bootstrap` and `migrate` containers run once and exit (that's expected).
 
