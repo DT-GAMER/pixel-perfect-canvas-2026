@@ -19,6 +19,7 @@ import { Footer } from "@/components/site/Footer";
 import { CountdownPill } from "@/components/site/CountdownPill";
 import { RegisterModal } from "@/components/site/RegisterModal";
 import { MetaPixel } from "@/components/site/MetaPixel";
+import { GoogleAnalytics } from "@/components/site/GoogleAnalytics";
 
 function NotFoundComponent() {
   return (
@@ -147,6 +148,7 @@ function RootComponent() {
         Skip to content
       </a>
       <MetaPixel pixelId={settings.metaPixelId} />
+      <GoogleAnalytics measurementId={settings.gaMeasurementId} />
       <Header />
       <main id="main" tabIndex={-1} className="focus:outline-none">
         <Outlet />

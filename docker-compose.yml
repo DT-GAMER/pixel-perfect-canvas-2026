@@ -42,6 +42,7 @@ services:
       SMTP_PORT: 1025
       TRUST_PROXY: ${TRUST_PROXY:-false}
       META_PIXEL_ID: ${META_PIXEL_ID:-}
+      GA_MEASUREMENT_ID: ${GA_MEASUREMENT_ID:-}
     depends_on:
       migrate:
         condition: service_completed_successfully

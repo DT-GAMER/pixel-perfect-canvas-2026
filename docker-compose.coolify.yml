@@ -50,6 +50,9 @@ services:
       # Meta (Facebook) Pixel for ad measurement. Public ID, not a secret.
       # Set META_PIXEL_ID to empty in Coolify to turn tracking off.
       - META_PIXEL_ID=${META_PIXEL_ID-676564168820649}
+      # Google Analytics 4 measurement ID. Public ID, not a secret.
+      # Set GA_MEASUREMENT_ID in Coolify to change it, or to empty to turn it off.
+      - GA_MEASUREMENT_ID=${GA_MEASUREMENT_ID-G-ZGX0KVRPDE}
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/healthz').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
       interval: 15s

@@ -94,14 +94,14 @@ export function PrivacyPolicy({ policy }: Props) {
           <p>We do not sell your personal information.</p>
         </Section>
 
-        <Section title="Advertising and cookies">
+        <Section title="Analytics, advertising, and cookies">
           <p>
-            We use the Meta Pixel, a tool from Meta (Facebook and Instagram), to measure how well
-            our ads work. When you visit this site, it uses cookies to record pages you view and
-            whether you registered or sent a sponsorship enquiry. It does not receive the details
-            you type into our forms. Meta may use this to show you relevant ads. You can manage this
-            in your Facebook or Instagram ad settings, or block it with your browser's privacy
-            settings.
+            We use Google Analytics to understand how people use this site, and the Meta Pixel, a
+            tool from Meta (Facebook and Instagram), to measure how well our ads work. When you
+            visit, they use cookies to record pages you view and whether you registered or sent a
+            sponsorship enquiry. They do not receive the details you type into our forms. Meta may
+            use this to show you relevant ads. You can manage this in your Google, Facebook, or
+            Instagram ad settings, or block it with your browser's privacy settings.
           </p>
         </Section>
 

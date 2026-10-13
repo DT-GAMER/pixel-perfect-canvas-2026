@@ -16,6 +16,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { submitSponsorEnquiry } from "@/lib/sponsors.functions";
 import { trackMeta } from "@/lib/meta-pixel";
+import { trackGoogle } from "@/lib/google-analytics";
 import { SPONSOR_TIERS, sponsorEnquirySchema, type SponsorEnquiryInput } from "@/lib/sponsorship";
 import { Field } from "./FormField";
 
@@ -51,6 +52,7 @@ export function SponsorEnquiryForm({ defaultTier }: { defaultTier?: Tier | undef
           content_name: "Sponsor enquiry",
           content_category: values.tierInterest,
         });
+        trackGoogle("generate_lead", { lead_source: "Sponsor enquiry", tier: values.tierInterest });
         setSent(true);
       } else if (result.status === "rate_limited")
         setError("root", { message: "Too many enquiries from here. Please try again in an hour." });

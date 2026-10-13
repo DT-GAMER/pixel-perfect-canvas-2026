@@ -26,6 +26,8 @@ export type SiteSettings = {
   siteUrl: string;
   /** Meta Pixel ID from META_PIXEL_ID (not stored); null disables the pixel. */
   metaPixelId: string | null;
+  /** Google Analytics ID from GA_MEASUREMENT_ID (not stored); null disables it. */
+  gaMeasurementId: string | null;
 };
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -44,6 +46,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   stats: [],
   siteUrl: "http://localhost:3000",
   metaPixelId: null,
+  gaMeasurementId: null,
 };
 
 const settings: SiteSettings = { ...DEFAULT_SETTINGS };
@@ -103,6 +106,9 @@ export const EVENT = {
   },
   get metaPixelId() {
     return settings.metaPixelId;
+  },
+  get gaMeasurementId() {
+    return settings.gaMeasurementId;
   },
   /** "2026" */
   get edition() {

@@ -3,6 +3,12 @@ import { applySettings, DEFAULT_SETTINGS, type SiteSettings, type Stat } from ".
 
 const CACHE_MS = 30_000;
 
+// "G-XXXXXXXXXX" only, so the ID can safely go into the page.
+const gaMeasurementId = () => {
+  const id = process.env["GA_MEASUREMENT_ID"]?.trim().toUpperCase();
+  return id && /^G-[A-Z0-9]{4,16}$/.test(id) ? id : null;
+};
+
 // Digits only, so the ID can safely go into the page.
 const metaPixelId = () => {
   const id = process.env["META_PIXEL_ID"]?.trim();
@@ -13,7 +19,12 @@ let cached: { value: SiteSettings; at: number } | undefined;
 export async function loadSettings(): Promise<SiteSettings> {
   const { siteUrl } = await import("./site-url.server");
   if (cached && Date.now() - cached.at < CACHE_MS) {
-    const value = { ...cached.value, siteUrl: siteUrl(), metaPixelId: metaPixelId() };
+    const value = {
+      ...cached.value,
+      siteUrl: siteUrl(),
+      metaPixelId: metaPixelId(),
+      gaMeasurementId: gaMeasurementId(),
+    };
     applySettings(value);
     return value;
   }
@@ -42,8 +53,14 @@ export async function loadSettings(): Promise<SiteSettings> {
         stats: (data.stats as Stat[] | null) ?? [],
         siteUrl: siteUrl(),
         metaPixelId: metaPixelId(),
+        gaMeasurementId: gaMeasurementId(),
       }
-    : { ...DEFAULT_SETTINGS, siteUrl: siteUrl(), metaPixelId: metaPixelId() };
+    : {
+        ...DEFAULT_SETTINGS,
+        siteUrl: siteUrl(),
+        metaPixelId: metaPixelId(),
+        gaMeasurementId: gaMeasurementId(),
+      };
   cached = { value, at: Date.now() };
   applySettings(value);
   return value;
