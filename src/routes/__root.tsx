@@ -18,6 +18,7 @@ import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { CountdownPill } from "@/components/site/CountdownPill";
 import { RegisterModal } from "@/components/site/RegisterModal";
+import { MetaPixel } from "@/components/site/MetaPixel";
 
 function NotFoundComponent() {
   return (
@@ -122,7 +123,8 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   // Browser: event settings arrive with the root loader (the server set them per request).
-  applySettings(Route.useLoaderData());
+  const settings = Route.useLoaderData();
+  applySettings(settings);
   // The admin dashboard has its own layout, without the public site chrome.
   const isAdmin = useRouterState({
     select: (state) => state.location.pathname.startsWith("/admin"),
@@ -144,6 +146,7 @@ function RootComponent() {
       >
         Skip to content
       </a>
+      <MetaPixel pixelId={settings.metaPixelId} />
       <Header />
       <main id="main" tabIndex={-1} className="focus:outline-none">
         <Outlet />

@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { submitSponsorEnquiry } from "@/lib/sponsors.functions";
+import { trackMeta } from "@/lib/meta-pixel";
 import { SPONSOR_TIERS, sponsorEnquirySchema, type SponsorEnquiryInput } from "@/lib/sponsorship";
 import { Field } from "./FormField";
 
@@ -45,8 +46,13 @@ export function SponsorEnquiryForm({ defaultTier }: { defaultTier?: Tier | undef
   const submit = handleSubmit(async (values) => {
     try {
       const result = await submitEnquiry({ data: values });
-      if (result.status === "success") setSent(true);
-      else if (result.status === "rate_limited")
+      if (result.status === "success") {
+        trackMeta("Lead", {
+          content_name: "Sponsor enquiry",
+          content_category: values.tierInterest,
+        });
+        setSent(true);
+      } else if (result.status === "rate_limited")
         setError("root", { message: "Too many enquiries from here. Please try again in an hour." });
       else setError("root", { message: "We couldn't send your enquiry. Please try again." });
     } catch {

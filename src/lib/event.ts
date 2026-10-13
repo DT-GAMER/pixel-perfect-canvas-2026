@@ -24,6 +24,8 @@ export type SiteSettings = {
   stats: Stat[];
   /** Public origin, e.g. https://c8techsummit.com (not stored; set per request). */
   siteUrl: string;
+  /** Meta Pixel ID from META_PIXEL_ID (not stored); null disables the pixel. */
+  metaPixelId: string | null;
 };
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -41,6 +43,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   instagramUrl: "https://www.instagram.com/c8techsummit?stkn=MWdyemZiMmxzODhydA==",
   stats: [],
   siteUrl: "http://localhost:3000",
+  metaPixelId: null,
 };
 
 const settings: SiteSettings = { ...DEFAULT_SETTINGS };
@@ -97,6 +100,9 @@ export const EVENT = {
   },
   get siteUrl() {
     return settings.siteUrl;
+  },
+  get metaPixelId() {
+    return settings.metaPixelId;
   },
   /** "2026" */
   get edition() {

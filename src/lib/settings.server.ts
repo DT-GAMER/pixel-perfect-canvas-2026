@@ -2,12 +2,18 @@
 import { applySettings, DEFAULT_SETTINGS, type SiteSettings, type Stat } from "./event";
 
 const CACHE_MS = 30_000;
+
+// Digits only, so the ID can safely go into the page.
+const metaPixelId = () => {
+  const id = process.env["META_PIXEL_ID"]?.trim();
+  return id && /^\d{5,20}$/.test(id) ? id : null;
+};
 let cached: { value: SiteSettings; at: number } | undefined;
 
 export async function loadSettings(): Promise<SiteSettings> {
   const { siteUrl } = await import("./site-url.server");
   if (cached && Date.now() - cached.at < CACHE_MS) {
-    const value = { ...cached.value, siteUrl: siteUrl() };
+    const value = { ...cached.value, siteUrl: siteUrl(), metaPixelId: metaPixelId() };
     applySettings(value);
     return value;
   }
@@ -35,8 +41,9 @@ export async function loadSettings(): Promise<SiteSettings> {
         instagramUrl: data.instagram_url,
         stats: (data.stats as Stat[] | null) ?? [],
         siteUrl: siteUrl(),
+        metaPixelId: metaPixelId(),
       }
-    : { ...DEFAULT_SETTINGS, siteUrl: siteUrl() };
+    : { ...DEFAULT_SETTINGS, siteUrl: siteUrl(), metaPixelId: metaPixelId() };
   cached = { value, at: Date.now() };
   applySettings(value);
   return value;

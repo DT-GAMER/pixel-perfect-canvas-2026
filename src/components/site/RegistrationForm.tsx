@@ -24,6 +24,7 @@ import {
   type RegistrationInput,
 } from "@/lib/registration";
 import { submitRegistration } from "@/lib/registration.functions";
+import { trackMeta } from "@/lib/meta-pixel";
 import { Field } from "./FormField";
 
 const emptyForm: RegistrationInput = {
@@ -76,6 +77,11 @@ export function RegistrationForm({
     try {
       const response = await registerPerson({ data: next ? { ...values, next } : values });
       if (response.status === "success" || response.status === "duplicate") {
+        // New registrations only (not "already registered"): the ad conversion.
+        if (response.status === "success")
+          trackMeta("CompleteRegistration", {
+            content_name: next ? "Blog sign-up" : "Summit registration",
+          });
         onResult(response.status);
         return;
       }

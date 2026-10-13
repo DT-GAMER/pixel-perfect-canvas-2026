@@ -6,7 +6,7 @@ import type { RichDoc } from "@/lib/rich-text";
 
 // Plain-language policy describing what the site actually collects today.
 // Becomes admin-editable in Phase 6; have it reviewed before launch.
-const LAST_UPDATED = "7 October 2026";
+const LAST_UPDATED = "13 October 2026";
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -92,6 +92,17 @@ export function PrivacyPolicy({ policy }: Props) {
             </li>
           </ul>
           <p>We do not sell your personal information.</p>
+        </Section>
+
+        <Section title="Advertising and cookies">
+          <p>
+            We use the Meta Pixel, a tool from Meta (Facebook and Instagram), to measure how well
+            our ads work. When you visit this site, it uses cookies to record pages you view and
+            whether you registered or sent a sponsorship enquiry. It does not receive the details
+            you type into our forms. Meta may use this to show you relevant ads. You can manage this
+            in your Facebook or Instagram ad settings, or block it with your browser's privacy
+            settings.
+          </p>
         </Section>
 
         <Section title="Who we share it with">
